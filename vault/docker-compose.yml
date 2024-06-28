@@ -1,0 +1,20 @@
+# docker-compose.yml - UH Groupings Vault - dev environment
+
+services:
+  vault:
+    image: hashicorp/vault:latest
+    container_name: groupings-vault
+    ports:
+      - "8200:8200"
+    volumes:
+      - ${HOME}/.vault/uhgroupings/data:/vault/data
+      - ${HOME}/.vault/uhgroupings/config:/vault/config
+    environment:
+      VAULT_ADDR: http://127.0.0.1:8200
+      VAULT_CONFIG_DIR: /vault/config
+    cap_add:
+      - IPC_LOCK
+    entrypoint:
+      - vault
+      - server
+    command: -config=/vault/config/vault-config.hcl
