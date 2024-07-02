@@ -8,9 +8,11 @@ services:
     ports:
       - "8081:8081"
     volumes:
-      - ${GROUPINGS_API_SRC}:/app  # Mount the source code directory
+      - ${GROUPINGS_API_SRC}:/app  # Hot reload directory
     environment:
       - SPRING_PROFILES_ACTIVE=localhost
+      - VAULT_SECRET_JSON=${VAULT_SECRET_JSON}
+      - VAULT_SECRET_KEY=${VAULT_SECRET_KEY}
 
 #  groupings-ui:
 #    build:

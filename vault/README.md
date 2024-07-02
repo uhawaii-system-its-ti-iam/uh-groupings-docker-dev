@@ -83,9 +83,7 @@ Ensure that the key-value secrets engine is installed:
 
 ## Set up the access policy for the groupings deployment
 
-### Create the password access token for the groupings deployment
 
-work in progress
 
 # Troubleshooting
 

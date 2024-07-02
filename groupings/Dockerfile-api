@@ -21,11 +21,15 @@ WORKDIR /app
 FROM rockylinux/rockylinux:8
 
 # Install Java Runtime
-RUN dnf -y install java-17-openjdk \
+RUN dnf -y install java-17-openjdk jq \
     && dnf clean all
 
 # Prepare to receive the built jar file, assuming it will be added via volume or build
 WORKDIR /app
 
-# Command to run the application (assumes a built jar is present)
-CMD ["java", "-jar", "groupings-api.jar"]
+# Copy the startup script
+COPY start-app.sh /app/start-app.sh
+RUN chmod +x /app/start-app.sh
+
+# Command to run the startup script
+CMD ["/app/start-app.sh"]
