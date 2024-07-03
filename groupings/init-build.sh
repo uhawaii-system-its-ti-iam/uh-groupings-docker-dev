@@ -33,6 +33,8 @@ set_token_var() {
     local var_name=$1
     local var_value
 
+    read -e -p "Enter ${var_name}: " -r var_value
+
     if [ -z "${var_value}" ]; then
         echo "Error: ${var_name} cannot be blank. Exiting..."
         exit 1
@@ -43,9 +45,17 @@ set_token_var() {
 # Function: get the Grouper API password_json data from the vault.
 set_password_json_var() {
     local var_name=$1
+    local password_json
 
-    # Fetch the data from Vault.
-    password_json=$(vault kv get -format=json "$SECRET_PATH")
+    password_json=$(curl --header "X-Vault-Token: ${VAULT_TOKEN}" \
+                         --request GET "${VAULT_ADDR}/v1/${SECRET_PATH}" \
+                         --silent)
+
+    if [ $? -ne 0 ]; then
+        echo "Error: Failed to communicate with Vault. Exiting..."
+        exit 1
+    fi
+
     if [ -z "${password_json}" ]; then
         echo "Error: Failed to retrieve data from Vault. Exiting..."
         exit 1

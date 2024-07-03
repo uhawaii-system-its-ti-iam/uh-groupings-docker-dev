@@ -1,4 +1,4 @@
-# Dockerfile-api - UH Groupings API - hot update the container
+# Dockerfile-ui - UH Groupings UI - hot update the container
 
 # Base image for building the project
 FROM rockylinux/rockylinux:8 as build
@@ -18,14 +18,14 @@ WORKDIR /app
 FROM rockylinux/rockylinux:8
 
 # Install Java Runtime
-RUN dnf -y install java-17-openjdk jq \
+RUN dnf -y install java-17-openjdk \
     && dnf clean all
 
 WORKDIR /app
 
 # Copy the startup script
-COPY start-api.sh /app/start-api.sh
-RUN chmod +x /app/start-api.sh
+COPY start-ui.sh /app/start-ui.sh
+RUN chmod +x /app/start-ui.sh
 
 # Command to run the startup script
-CMD ["/app/start-api.sh"]
+CMD ["/app/start-ui.sh"]
