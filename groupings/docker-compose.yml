@@ -1,6 +1,7 @@
 # docker-compose.yml - UH Groupings - dev environment
 
 services:
+
   groupings-api:
     build:
       context: .
@@ -14,13 +15,13 @@ services:
       - VAULT_SECRET_JSON=${VAULT_SECRET_JSON}
       - VAULT_SECRET_KEY=${VAULT_SECRET_KEY}
 
-#  groupings-ui:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile-ui
-#    ports:
-#      - "8080:8080"
-#    volumes:
-#      - ${GROUPINGS_UI_SRC}:/app
-#    environment:
-#      - SPRING_PROFILES_ACTIVE=localhost
+  groupings-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile-ui
+    ports:
+      - "8080:8080"
+    volumes:
+      - ${GROUPINGS_UI_SRC}:/app  # Hot reload directory
+    environment:
+      - SPRING_PROFILES_ACTIVE=localhost

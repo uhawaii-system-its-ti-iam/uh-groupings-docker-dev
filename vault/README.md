@@ -69,9 +69,15 @@ Ensure that the key-value secrets engine is installed:
 
 ## Store the Grouper API Password
 
+Import vault values for here and in the scripts:
+
+- Vault path:   "secret/uhgroupings"
+- Password key: "grouperClient.webService.password_json"
+- Vault UI:     "http://localhost:8200"
+
 ### Manually
 
-(replace the sample password with the actual password)
+(replace "samplepwd" with the actual password)
 
     vault kv put secret/uhgroupings grouperClient.webService.password=samplepwd
     vault kv get -format=json secret/uhgroupings
@@ -80,10 +86,6 @@ Ensure that the key-value secrets engine is installed:
 
 - Navigate to http://localhost:8200
 - Use the root token to log in.
-
-## Set up the access policy for the groupings deployment
-
-
 
 # Troubleshooting
 

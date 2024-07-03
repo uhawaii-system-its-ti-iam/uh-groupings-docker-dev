@@ -10,7 +10,7 @@ The docker stack contains the following:
 2) Groupings API container featuring hot updates.
 3) Groupings UI container featuring hot updates.
 
-Anticipate localhost tools:
+Anticipated localhost tools:
 
 1) docker desktop (and a Docker Hub account)
 
@@ -18,16 +18,19 @@ Anticipate localhost tools:
 
 ## Linux/macOS/Windows
 
-Download the project.
+Install docker desktop (optional).
+
+Download the projectm (shell commands):
 
     mkdir gitclone
     cd gitclone
-    git clone https://github.com/uhawaii-system-its-ti-iam/hashicorp-vault-docker-image.git
+    git clone https://github.com/uhawaii-system-its-ti-iam/uh-groupings-docker-dev.git
+    cd uh-groupings-docker-dev
 
 ## Set up the vault
 
-The vault must be set up and the Grouper API password added to it before the 
-Groupings containers are created.
+The vault must be set up and the test Grouper API password added to it before  
+the Groupings containers are created.
 
     cd vault
 
