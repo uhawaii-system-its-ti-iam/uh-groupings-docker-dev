@@ -7,7 +7,7 @@ SECRET_PATH="secret/uhgroupings"
 export VAULT_ADDR="http://localhost:8200"
 export VAULT_SECRET_KEY="grouperClient.webService.password_json"
 
-# Function: validate and set an environment variable with the absolute /src path
+# Function: validate and set an environment variable with the absolute /src path.
 set_src_var() {
     local var_name=$1
     local var_value
@@ -19,6 +19,24 @@ set_src_var() {
         exit 1
     elif [[ ! "${var_value}" =~ /src$ ]]; then
         echo "Error: The path must end with '/src'. Exiting..."
+        exit 1
+    elif [[ ! -d "${var_value}" ]]; then
+        echo "Error: The directory ${var_value} does not exist. Exiting..."
+        exit 1
+    fi
+
+    export "${var_name}=${var_value}"
+}
+
+# Function: validate and set an environment variable with the overrides path.
+set_overrides_var() {
+    local var_name=$1
+    local var_value
+
+    read -e -p "Enter ${var_name}: " -r var_value
+
+    if [ -z "${var_value}" ]; then
+        echo "Error: ${var_name} cannot be blank. Exiting..."
         exit 1
     elif [[ ! -d "${var_value}" ]]; then
         echo "Error: The directory ${var_value} does not exist. Exiting..."
@@ -72,25 +90,27 @@ echo ""
 echo " *** An absolute path is required and must end with /src ***"
 echo "-------------------------------------------------------------------------"
 
-# Set GROUPINGS_API_SRC
+# Set GROUPINGS_OVERRIDES directory path.
+echo "Provide the absolute path to the overrides file directory:"
+set_overrides_var "GROUPINGS_OVERRIDES"
+
+# Set GROUPINGS_API_SRC directory path.
+Echo "Provide the absolute path:"
 set_src_var "GROUPINGS_API_SRC"
 
-# Set GROUPINGS_UI_SRC
+# Set GROUPINGS_UI_SRC directory path.
 set_src_var "GROUPINGS_UI_SRC"
 
+# Set VAULT_TOKEN value.
 echo "Provide the vault token for opening the vault:"
-
-# Set VAULT_TOKEN
 set_token_var "VAULT_TOKEN"
 
-echo "Retrieving Grouper API password from the vault..."
-
 # Get and set the Grouper API password_json.
+echo "Retrieving Grouper API password from the vault..."
 set_password_json_var "VAULT_SECRET_JSON"
 
-echo "Building and deploying the Grouping API container..."
-
 # Build/rebuild and deploy the images.
+echo "Building and deploying the Grouping API container..."
 docker-compose up --build -d
 if [ $? -eq 0 ]; then
     echo "Success: Images built, containers deployed"

@@ -10,6 +10,7 @@ services:
       - "8081:8081"
     volumes:
       - ${GROUPINGS_API_SRC}:/app  # Hot reload directory
+      - ${GROUPINGS_OVERRIDES}:/overrides
     environment:
       - SPRING_PROFILES_ACTIVE=localhost
       - VAULT_SECRET_JSON=${VAULT_SECRET_JSON}
@@ -23,5 +24,6 @@ services:
       - "8080:8080"
     volumes:
       - ${GROUPINGS_UI_SRC}:/app  # Hot reload directory
+      - ${GROUPINGS_OVERRIDES}:/overrides
     environment:
       - SPRING_PROFILES_ACTIVE=localhost
