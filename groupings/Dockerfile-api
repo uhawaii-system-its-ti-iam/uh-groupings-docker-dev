@@ -1,31 +1,21 @@
 # Dockerfile-api - UH Groupings API - hot update the container
 
-# Base image for building the project
+# Assuming the source code will be mounted, no need to clone.
+# Just prepare the environment for building the project.
+
+# Base image for building the project.
 FROM rockylinux/rockylinux:8 as build
 
-# Install Java and Maven
+# Install Java, Maven, and jq.
 RUN dnf -y module enable maven:3.6 \
-    && dnf -y install maven java-17-openjdk-devel \
-    && dnf clean all
-
-# Set the working directory in the container
-WORKDIR /app
-
-# Assuming the source code will be mounted, no need to clone
-# Just prepare the environment for building the project
-
-# Base image for running the application
-FROM rockylinux/rockylinux:8
-
-# Install Java Runtime
-RUN dnf -y install java-17-openjdk jq \
+    && dnf -y install maven java-17-openjdk-devel jq \
     && dnf clean all
 
 WORKDIR /app
 
-# Copy the startup script
+# Copy the startup script.
 COPY start-api.sh /app/start-api.sh
 RUN chmod +x /app/start-api.sh
 
-# Command to run the startup script
+# Command to run the startup script.
 CMD ["/app/start-api.sh"]

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# init-build.sh - initialize for running vault.
+# build.sh - initialize for running vault.
 
 # Check if HOME environment variable is not set.
 if [ -z "${HOME}" ]; then

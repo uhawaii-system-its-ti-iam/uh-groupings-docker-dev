@@ -9,7 +9,7 @@ services:
     ports:
       - "8081:8081"
     volumes:
-      - ${GROUPINGS_API_SRC}:/app  # Hot reload directory
+      - ${GROUPINGS_API_DIR}:/app/groupings  # Hot reload directory
       - ${GROUPINGS_OVERRIDES}:/overrides
     environment:
       - SPRING_PROFILES_ACTIVE=localhost
@@ -23,7 +23,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ${GROUPINGS_UI_SRC}:/app  # Hot reload directory
+      - ${GROUPINGS_UI_DIR}:/app/groupings  # Hot reload directory
       - ${GROUPINGS_OVERRIDES}:/overrides
     environment:
       - SPRING_PROFILES_ACTIVE=localhost

@@ -1,35 +1,58 @@
 #!/bin/bash
 
-# init-build.sh - deploy groupings containers with hot source code syncing
+# build.sh - deploy groupings containers with hot source code syncing
 
 # Vault access
 SECRET_PATH="secret/uhgroupings"
 export VAULT_ADDR="http://localhost:8200"
 export VAULT_SECRET_KEY="grouperClient.webService.password_json"
 
-# Function: validate and set an environment variable with the absolute /src path.
-set_src_var() {
+# Function: get the Grouper API password_json data from the vault.
+set_password_json_var() {
     local var_name=$1
-    local var_value
+    local password_json
 
-    read -e -p "Enter ${var_name}: " -r var_value
+    password_json=$(curl --header "X-Vault-Token: ${VAULT_TOKEN}" \
+                         --request GET "${VAULT_ADDR}/v1/${SECRET_PATH}" \
+                         --silent)
 
-    if [ -z "${var_value}" ]; then
-        echo "Error: ${var_name} cannot be blank. Exiting..."
-        exit 1
-    elif [[ ! "${var_value}" =~ /src$ ]]; then
-        echo "Error: The path must end with '/src'. Exiting..."
-        exit 1
-    elif [[ ! -d "${var_value}" ]]; then
-        echo "Error: The directory ${var_value} does not exist. Exiting..."
+    if [ $? -ne 0 ]; then
+        echo "Error: Failed to communicate with Vault. Exiting..."
         exit 1
     fi
 
-    export "${var_name}=${var_value}"
+    if [ -z "${password_json}" ]; then
+        echo "Error: Failed to retrieve data from Vault. Exiting..."
+        exit 1
+    fi
+
+    export "${var_name}=${password_json}"
 }
 
-# Function: validate and set an environment variable with the overrides path.
-set_overrides_var() {
+# Function: validate and set an environment variable with the Maven directory
+# path.
+set_mvnw_var() {
+     local var_name=$1
+     local var_value
+
+     read -e -p "Enter ${var_name}: " -r var_value
+
+     if [ -z "${var_value}" ]; then
+         echo "Error: ${var_name} cannot be blank. Exiting..."
+         exit 1
+     elif [[ ! -d "${var_value}" ]]; then
+         echo "Error: The directory ${var_value} does not exist. Exiting..."
+         exit 1
+     elif [[ ! -f "${var_value}/mvnw" ]]; then
+         echo "Error: The file 'mvnw' does not exist in the directory ${var_value}. Exiting..."
+         exit 1
+     fi
+
+     export "${var_name}=${var_value}"
+}
+
+# Function: validate and set an environment variable with a directory path.
+set_path_var() {
     local var_name=$1
     local var_value
 
@@ -60,46 +83,22 @@ set_token_var() {
     export "${var_name}=${var_value}"
 }
 
-# Function: get the Grouper API password_json data from the vault.
-set_password_json_var() {
-    local var_name=$1
-    local password_json
-
-    password_json=$(curl --header "X-Vault-Token: ${VAULT_TOKEN}" \
-                         --request GET "${VAULT_ADDR}/v1/${SECRET_PATH}" \
-                         --silent)
-
-    if [ $? -ne 0 ]; then
-        echo "Error: Failed to communicate with Vault. Exiting..."
-        exit 1
-    fi
-
-    if [ -z "${password_json}" ]; then
-        echo "Error: Failed to retrieve data from Vault. Exiting..."
-        exit 1
-    fi
-
-    export "${var_name}=${password_json}"
-}
-
 echo "-------------------------------------------------------------------------"
 echo "To hot sync localhost source code changes into the containers, provide"
-echo "the paths to your project /src directories. They are required to hot sync"
+echo "the paths to your project directories. They are required to hot sync"
 echo "localhost source code changes into the containers."
-echo ""
-echo " *** An absolute path is required and must end with /src ***"
 echo "-------------------------------------------------------------------------"
 
 # Set GROUPINGS_OVERRIDES directory path.
 echo "Provide the absolute path to the overrides file directory:"
-set_overrides_var "GROUPINGS_OVERRIDES"
+set_path_var "GROUPINGS_OVERRIDES"
 
-# Set GROUPINGS_API_SRC directory path.
-Echo "Provide the absolute path:"
-set_src_var "GROUPINGS_API_SRC"
+# Set GROUPINGS_API_DIR directory path.
+Echo "Provide the absolute path to the Maven wrapper:"
+set_mvnw_var "GROUPINGS_API_DIR"
 
-# Set GROUPINGS_UI_SRC directory path.
-set_src_var "GROUPINGS_UI_SRC"
+# Set GROUPINGS_UI_DIR directory path.
+set_mvnw_var "GROUPINGS_UI_DIR"
 
 # Set VAULT_TOKEN value.
 echo "Provide the vault token for opening the vault:"

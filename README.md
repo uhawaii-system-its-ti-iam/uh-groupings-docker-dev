@@ -1,5 +1,17 @@
 **_This project is purely experimental at this point._**
 
+# Table of Contents
+<!-- TOC -->
+* [Overview](#overview)
+* [Setting Up](#setting-up)
+  * [Spring Boot Hot Updates with DevTools](#spring-boot-hot-updates-with-devtools)
+    * [DevTools Key Features](#devtools-key-features)
+    * [Enable DevTools](#enable-devtools)
+  * [Linux/macOS/Windows](#linuxmacoswindows)
+  * [Set up the vault](#set-up-the-vault)
+  * [Set up the Groupings API and UI](#set-up-the-groupings-api-and-ui)
+<!-- TOC -->
+
 # Overview
 
 Use docker to develop the UH Groupings project on a locahost environment.
@@ -12,15 +24,55 @@ The docker stack contains the following:
 
 Anticipated localhost tools:
 
-1) docker desktop (and a Docker Hub account)
+1) Docker Desktop (and a Docker Hub account)
 
 # Setting Up
 
+## Spring Boot Hot Updates with DevTools
+
+Hot Updates to the source code can be sync'ed to the running container and 
+force the app in the container to be restarted. Spring Boot must be configured
+appropriately to enable hot updates.
+
+This is possible because the containers mount your source directories on your
+localhost. The purpose of the containers is simply to run the projects.
+
+### DevTools Key Features
+
+- Automatic Restart: DevTools monitors for any changes in your classpath and 
+automatically restarts your Spring Boot application.
+- Live Reload: This feature allows you to refresh your browser automatically 
+whenever there are changes detected to resources.
+- Remote Development: It can also be configured to work with applications 
+running in containers.
+
+### Enable DevTools
+
+_(enabling DevTools is optional)_
+
+Add to Maven pom.xml:
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+Add to localhost properties file:
+
+    # Enable automatic restart
+    spring.devtools.restart.enabled=true
+    # Disable template caches
+    spring.thymeleaf.cache=false
+
 ## Linux/macOS/Windows
 
-Install docker desktop (optional).
+Install Docker Desktop (optional).
 
-Download the projectm (shell commands):
+Download the project (shell commands):
 
     mkdir gitclone
     cd gitclone

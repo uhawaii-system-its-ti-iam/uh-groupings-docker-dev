@@ -22,7 +22,7 @@ Download the groupings API project.
     cd gitclone
     git clone https://github.com/uhawaii-system-its-ti-iam/hashicorp-vault-docker-image.git
 
- Deploy the containers (for Windows there is a .bat file).
+ Deploy the containers (for Windows there is a Powershell script).
 
     cd hashicorp-vault-docker-image/vault
     chmod +x init-biuld.sh
