@@ -7,7 +7,7 @@ SECRET_PATH="secret/uhgroupings"
 export VAULT_ADDR="http://localhost:8200"
 export VAULT_SECRET_KEY="grouperClient.webService.password"
 
-# Function: get the Grouper API password_json data from the vault.
+# Function: get the Grouper API password data from the vault.
 set_password_json_var() {
     local var_name=$1
     local password_json
@@ -29,8 +29,8 @@ set_password_json_var() {
     export "${var_name}=${password_json}"
 }
 
-# Function: validate and set an environment variable with the Maven directory
-# path.
+# Function: validate and set an environment variable with the Maven wrapper
+# directory path.
 set_mvnw_var() {
      local var_name=$1
      local var_value
@@ -77,7 +77,7 @@ set_token_var() {
     read -e -p "Enter ${var_name}: " -r var_value
 
     if [ -z "${var_value}" ]; then
-        echo "Error: ${var_name} cannot be blank. Exiting..."
+        echo "Error: vault secret not found, review the README. Exiting..."
         exit 1
     fi
     export "${var_name}=${var_value}"
@@ -114,7 +114,7 @@ docker-compose up --build -d
 if [ $? -eq 0 ]; then
     echo "Success: Images built, containers deployed"
 else
-    echo "Error: Review the logs"
+    echo "Error: Review the logs, review the README, etc"
 fi
 
 exit 0

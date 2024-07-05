@@ -8,8 +8,6 @@
   * [Store the Grouper API Password](#store-the-grouper-api-password)
     * [Manually](#manually)
     * [With the web service](#with-the-web-service)
-  * [Set up the access policy for the groupings deployment](#set-up-the-access-policy-for-the-groupings-deployment)
-    * [Create the password access token for the groupings deployment](#create-the-password-access-token-for-the-groupings-deployment)
 * [Troubleshooting](#troubleshooting)
   * [version is obsolete](#version-is-obsolete)
   * [vault Error Head](#vault-error-head)
@@ -20,7 +18,7 @@
 # Overview
 
 Deploy a docker container on a development localhost environment to run 
-HashiCorp Vault to contain secrets for a containerized UH Groupings development
+HashCorp Vault to contain secrets for a containerized UH Groupings development
 instance.
 
 Implement a vault under the developer home directory to persistently store the 
@@ -35,8 +33,8 @@ Prep environment, start container.
   For Windows, the chmod step is not applicable.
 
     cd hashicorp-vault-docker-image/vault
-    chmod +x init-build.sh
-    ./init-build.sh
+    chmod +x build.sh
+    ./build.sh
 
 ## Vault Setup and Startup
 
@@ -77,9 +75,9 @@ Import vault values for here and in the scripts:
 
 ### Manually
 
-(replace "samplepwd" with the actual password)
+(replace "sample_password" with the actual password)
 
-    vault kv put secret/uhgroupings grouperClient.webService.password=samplepwd
+    vault kv put secret/uhgroupings grouperClient.webService.password=sample_password
     vault kv get -format=json secret/uhgroupings
 
 ### With the web service
