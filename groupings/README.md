@@ -12,7 +12,7 @@ effect.
 ## Prerequisites
 
 The localhost Vault container must be running and contain the Groupings API
-password.
+password. See the vault README for details.
 
 ## Linux/macOS/Windows
 

@@ -5,7 +5,7 @@
 # Vault access
 SECRET_PATH="secret/uhgroupings"
 export VAULT_ADDR="http://localhost:8200"
-export VAULT_SECRET_KEY="grouperClient.webService.password_json"
+export VAULT_SECRET_KEY="grouperClient.webService.password"
 
 # Function: get the Grouper API password_json data from the vault.
 set_password_json_var() {

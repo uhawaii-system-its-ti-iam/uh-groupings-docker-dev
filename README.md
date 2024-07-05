@@ -68,6 +68,12 @@ Add to localhost properties file:
     # Disable template caches
     spring.thymeleaf.cache=false
 
+It may be necessary to add the following to the localhost properties file in
+order to ensure that hot reloading to the container works as expected.
+
+    spring.devtools.restart.polling-interval=1000
+    spring.devtools.restart.trigger-file=/.trigger
+
 ## Linux/macOS/Windows
 
 Install Docker Desktop (optional).

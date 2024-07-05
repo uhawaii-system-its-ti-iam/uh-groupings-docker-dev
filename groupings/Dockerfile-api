@@ -7,8 +7,10 @@
 FROM rockylinux/rockylinux:8 as build
 
 # Install Java, Maven, and jq.
-RUN dnf -y module enable maven:3.6 \
-    && dnf -y install maven java-17-openjdk-devel jq \
+RUN dnf -y install epel-release \
+    && dnf config-manager --set-enabled powertools \
+    && dnf -y module enable maven:4.0 \
+    && dnf -y install maven jq java-17-openjdk \
     && dnf clean all
 
 WORKDIR /app
