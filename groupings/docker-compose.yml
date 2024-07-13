@@ -16,14 +16,14 @@ services:
       - VAULT_SECRET_JSON=${VAULT_SECRET_JSON}
       - VAULT_SECRET_KEY=${VAULT_SECRET_KEY}
 
-  groupings-ui:
-    build:
-      context: .
-      dockerfile: Dockerfile-ui
-    ports:
-      - "8080:8080"
-    volumes:
-      - ${GROUPINGS_UI_DIR}:/app/groupings  # Hot reload directory
-      - ${GROUPINGS_OVERRIDES}:/overrides
-    environment:
-      - SPRING_PROFILES_ACTIVE=localhost
+#  groupings-ui:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile-ui
+#    ports:
+#      - "8080:8080"
+#    volumes:
+#      - ${GROUPINGS_UI_DIR}:/app/groupings  # Hot reload directory
+#      - ${GROUPINGS_OVERRIDES}:/overrides
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=localhost

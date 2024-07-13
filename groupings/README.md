@@ -25,5 +25,5 @@ Download the groupings API project.
  Deploy the containers (for Windows there is a Powershell script).
 
     cd hashicorp-vault-docker-image/vault
-    chmod +x biuld.sh
+    chmod +x build.sh
     ./build.sh
