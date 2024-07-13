@@ -2,9 +2,13 @@
 
 FROM rockylinux/rockylinux:8 as build
 
+# For maven version issues, uncomment the following and add it to the Run
+# statememt below before the "enable maven" line.
+#    dnf module list maven && \
+
 RUN dnf -y install dnf-plugins-core epel-release && \
     dnf config-manager --set-enabled powertools && \
-    dnf -y module enable maven:3.4 && \
+    dnf -y module enable maven:3.5 && \
     dnf -y install maven jq java-17-openjdk && \
     dnf clean all
 

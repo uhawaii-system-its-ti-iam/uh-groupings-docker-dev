@@ -3,7 +3,7 @@
 # build.sh - deploy groupings containers with hot source code syncing
 
 # Vault access
-SECRET_PATH="secret/uhgroupings"
+SECRET_PATH="/v1/secret/data/secret/uhgroupings"
 export VAULT_ADDR="http://localhost:8200"
 export VAULT_SECRET_KEY="grouperClient.webService.password"
 
@@ -12,9 +12,10 @@ set_password_json_var() {
     local var_name=$1
     local password_json
 
+    echo "Retrieving password from Vault..."
     password_json=$(curl --header "X-Vault-Token: ${VAULT_TOKEN}" \
                          --request GET "${VAULT_ADDR}/v1/${SECRET_PATH}" \
-                         --silent)
+                         --silent --show-error)
 
     if [ $? -ne 0 ]; then
         echo "Error: Failed to communicate with Vault. Exiting..."

@@ -69,7 +69,7 @@ Ensure that the key-value secrets engine is installed:
 
 Import vault values for here and in the scripts:
 
-- Vault path:   "secret/uhgroupings"
+- Vault path:   "/v1/secret/data/secret/uhgroupings"
 - Password key: "grouperClient.webService.password"
 - Vault UI:     "http://localhost:8200"
 
