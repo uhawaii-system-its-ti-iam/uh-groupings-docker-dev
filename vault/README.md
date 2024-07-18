@@ -26,6 +26,13 @@ Grouper API password used by the UH Groupings API. When the developer attempts
 to run the containerized UH Groupings project the vault will supply the 
 password.
 
+## Reminder to unseal the vault
+
+Each time the vault container is restarted the vault will need to be unsealed. 
+The unseal key and the token root token will be needed:
+
+- http://localhoost:8200
+
 # Installation
 
 Prep environment, start container.
@@ -67,15 +74,16 @@ Ensure that the key-value secrets engine is installed:
 
 ## Store the Grouper API Password
 
-Import vault values for here and in the scripts:
+Important vault values for here and in the scripts:
 
-- Vault path:   "/v1/secret/data/secret/uhgroupings"
+- Vault path:   "/secret/data/secret/uhgroupings"
 - Password key: "grouperClient.webService.password"
 - Vault UI:     "http://localhost:8200"
+- Vault URL:    "http://localhost:8200/v1/secret/data/uhgroupings"
 
 ### Manually
 
-(replace "sample_password" with the actual password)
+(replace "sample_password" with the actual grouper password)
 
     vault kv put secret/uhgroupings grouperClient.webService.password=sample_password
     vault kv get -format=json secret/uhgroupings
@@ -109,9 +117,9 @@ You must have a dockerhub access token in order to download docker images from D
 This requires starting over.
 
 1) Stop the container
-2) Delete the vault (see below)
+2) Delete the vault data (see below)
 3) Start the container
-4) Initialize the vault.
+4) Initialize the vault
 
 
     rm -rf ${HOME}/.vault/uhgroupings/data/*
