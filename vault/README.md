@@ -66,27 +66,22 @@ container's command prompt enter the following:
 
 _Be sure to save the unseal key and root token for later use._
 
-Ensure that the key-value secrets engine is installed:
-
-    vault login
-    vault secrets enable -path=secret kv-v2
-    vault secrets list 
-
 ## Store the Grouper API Password
 
 Important vault values for here and in the scripts:
 
-- Vault path:   "/secret/data/secret/uhgroupings"
+- Vault path:   "/cubbyhole/uhgroupings"
 - Password key: "grouperClient.webService.password"
 - Vault UI:     "http://localhost:8200"
-- Vault URL:    "http://localhost:8200/v1/secret/data/uhgroupings"
+- Vault URL:    "http://localhost:8200/v1/cubbyhole/uhgroupings"
 
 ### Manually
 
 (replace "sample_password" with the actual grouper password)
 
-    vault kv put secret/uhgroupings grouperClient.webService.password=sample_password
-    vault kv get -format=json secret/uhgroupings
+    vault login
+    vault write cubbyhole/uhgroupings grouperClient.webService.password=sample_password -format=json
+    vault read -format=json cubbyhole/uhgroupings
 
 ### With the web service
 
