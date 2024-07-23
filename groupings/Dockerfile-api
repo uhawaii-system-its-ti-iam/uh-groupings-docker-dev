@@ -1,19 +1,11 @@
 # Dockerfile-api - UH Groupings API - also enable hot updates
 
-FROM rockylinux/rockylinux:8 as build
-
-# For maven version issues, uncomment the following and add it to the Run
-# statememt below before the "enable maven" line.
-#    dnf module list maven && \
-
-RUN dnf -y install dnf-plugins-core epel-release && \
-    dnf config-manager --set-enabled powertools && \
-    dnf -y module enable maven:3.5 && \
-    dnf -y install maven jq java-17-openjdk && \
-    dnf clean all
+# Use the pre-built base image.
+FROM groupings-base-image AS build
 
 WORKDIR /app
 
+# Copy the start script and make it executable.
 COPY start-api.sh /app/
 RUN chmod +x /app/start-api.sh
 

@@ -1,5 +1,3 @@
-**_This project is purely experimental at this point._**
-
 # Table of Contents
 <!-- TOC -->
 * [Overview](#overview)
@@ -25,6 +23,9 @@ The docker stack contains the following:
 Anticipated localhost tools:
 
 1) Docker Desktop (and a Docker Hub account)
+
+**Is the overrides file still relevant?**
+  Yes. It overrides properties without the danger of the changes ending up in a PR.
 
 # Setting Up
 

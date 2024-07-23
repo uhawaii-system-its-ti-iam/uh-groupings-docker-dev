@@ -27,7 +27,6 @@ set_password_json_var() {
         echo "Error: Failed to communicate with Vault. Exiting..."
         exit 1
     fi
-
     if [ -z "${password_json}" ]; then
         echo "Error: Failed to retrieve data from Vault. Exiting..."
         exit 1

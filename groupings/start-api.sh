@@ -16,4 +16,5 @@ fi
 
 # Start the Spring Boot application.
 cd groupings
+
 ./mvnw spring-boot:run

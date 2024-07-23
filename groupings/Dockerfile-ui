@@ -1,21 +1,12 @@
-# Dockerfile-ui - UH Groupings UI - hot update the container
+# Dockerfile-ui - UH Groupings UI - also enable hot updates
 
-# Assuming the source code will be mounted, no need to clone.
-# Just prepare the environment for building the project.
-
-# Base image for building the project.
-FROM rockylinux/rockylinux:8 as build
-
-# Install Java and Maven
-RUN dnf -y module enable maven:3.4 \
-    && dnf -y install maven java-17-openjdk-devel \
-    && dnf clean all
+# Use the pre-built base image.
+FROM groupings-base-image AS build
 
 WORKDIR /app
 
-# Copy the startup script.
-COPY start-ui.sh /app/start-ui.sh
+# Copy the start script and make it executable.
+COPY start-ui.sh /app/
 RUN chmod +x /app/start-ui.sh
 
-# Command to run the startup script.
 CMD ["/app/start-ui.sh"]
