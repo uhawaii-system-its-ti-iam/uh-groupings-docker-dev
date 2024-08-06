@@ -27,6 +27,9 @@ Anticipated localhost tools:
 **Is the overrides file still relevant?**
   Yes. It overrides properties without the danger of the changes ending up in a PR.
 
+**Warning**
+The Powershell scripts are courtesy of GenAI and remain to be tested.
+
 # Setting Up
 
 ## Spring Boot Hot Updates with DevTools

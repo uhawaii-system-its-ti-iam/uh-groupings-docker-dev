@@ -2,7 +2,7 @@
 
 services:
 
-  base-image:
+  groupings-base:
     build:
       context: .
       dockerfile: Dockerfile-base
@@ -14,7 +14,7 @@ services:
       context: .
       dockerfile: Dockerfile-api
     depends_on:
-      - base-image
+      - groupings-base
     ports:
       - "8081:8081"
     volumes:

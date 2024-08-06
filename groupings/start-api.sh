@@ -5,8 +5,11 @@
 # The vault json with the password is parsed here rather than on the localhost
 # to ensure that the jq command is available.
 
-export GROUPER_API_PASSWORD=$(echo "${VAULT_SECRET_JSON}" | jq -r ".data[\"$VAULT_SECRET_KEY\"]")
-if [ -z "${GROUPER_API_PASSWORD}" ] || [ "${GROUPER_API_PASSWORD}" == "null" ]; then
+# WARNING: the name of the following environment variable must align with class
+#          GrouperPropertyConfigurer.java in the API project.
+
+export GROUPERCLIENT_WEBSERVICE_PASSWORD=$(echo "${VAULT_SECRET_JSON}" | jq -r ".data[\"$VAULT_SECRET_KEY\"]")
+if [ -z "${GROUPERCLIENT_WEBSERVICE_PASSWORD}" ] || [ "${GROUPERCLIENT_WEBSERVICE_PASSWORD}" == "null" ]; then
     echo "Error: Failed to parse Grouper API password from JSON. Exiting..."
     echo "more info:"
     echo " - VAULT_SECRET_KEY : ${VAULT_SECRET_KEY}"
