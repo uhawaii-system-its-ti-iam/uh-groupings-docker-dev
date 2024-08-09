@@ -31,7 +31,7 @@ password.
 Each time the vault container is restarted the vault will need to be unsealed. 
 The unseal key and the token root token will be needed:
 
-- http://localhoost:8200
+- http://localhost:8200/ui/vault/unseal
 
 # Installation
 
@@ -39,7 +39,7 @@ Prep environment, start container.
 
   For Windows, the chmod step is not applicable.
 
-    cd hashicorp-vault-docker-image/vault
+    cd uh-groupings-docker-dev/vault
     chmod +x build.sh
     ./build.sh
 
@@ -77,7 +77,7 @@ Important vault values for here and in the scripts:
 
 ### Manually
 
-(replace "sample_password" with the actual grouper password)
+(replace "sample_password" with the actual grouper test API password)
 
     vault login
     vault write cubbyhole/uhgroupings grouperClient.webService.password=sample_password -format=json
@@ -85,7 +85,7 @@ Important vault values for here and in the scripts:
 
 ### With the web service
 
-- Navigate to http://localhost:8200
+- Navigate to http://localhost:8200/ui/vault/dashboard
 - Use the root token to log in.
 
 # Troubleshooting

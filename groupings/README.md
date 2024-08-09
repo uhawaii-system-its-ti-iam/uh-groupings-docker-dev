@@ -11,19 +11,13 @@ effect.
 
 ## Prerequisites
 
-The localhost Vault container must be running and contain the Groupings API
-password. See the vault README for details.
+1. The groupings API and UI projects must already be cloned to the localhost.
+2. The localhost Vault container must be running and contain the Groupings API password. See the vault README for details.
 
 ## Linux/macOS/Windows
 
-Download the groupings API project.
+Deploy the containers (for Windows there is a Powershell script).
 
-    mkdir gitclone
-    cd gitclone
-    git clone https://github.com/uhawaii-system-its-ti-iam/hashicorp-vault-docker-image.git
-
- Deploy the containers (for Windows there is a Powershell script).
-
-    cd hashicorp-vault-docker-image/vault
+    cd uh-groupings-docker-dev/groupings
     chmod +x build.sh
     ./build.sh

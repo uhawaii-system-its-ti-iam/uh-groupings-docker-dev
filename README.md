@@ -8,6 +8,8 @@
   * [Linux/macOS/Windows](#linuxmacoswindows)
   * [Set up the vault](#set-up-the-vault)
   * [Set up the Groupings API and UI](#set-up-the-groupings-api-and-ui)
+* [TODOs](#todos)
+  * [Describe how best to handle password changes.](#describe-how-best-to-handle-password-changes)
 <!-- TOC -->
 
 # Overview
@@ -28,7 +30,7 @@ Anticipated localhost tools:
   Yes. It overrides properties without the danger of the changes ending up in a PR.
 
 **Warning**
-The Powershell scripts are courtesy of GenAI and remain to be tested.
+The Powershell scripts are courtesy of genAI and remain to be tested.
 
 # Setting Up
 
@@ -80,9 +82,10 @@ order to ensure that hot reloading to the container works as expected.
 
 ## Linux/macOS/Windows
 
-Install Docker Desktop (optional).
+1. Install Docker Desktop (optional)
 
-Download the project (shell commands):
+2. Download the project
+
 
     mkdir gitclone
     cd gitclone
@@ -91,8 +94,8 @@ Download the project (shell commands):
 
 ## Set up the vault
 
-The vault must be set up and the test Grouper API password added to it before  
-the Groupings containers are created.
+The vault must be set up and the Grouper API password added to it before the
+Groupings containers are created.
 
     cd vault
 
@@ -103,3 +106,7 @@ And review the README provided.
     cd groupings
 
 And review the README provided.
+
+# TODOs
+
+## Describe how best to handle password changes.

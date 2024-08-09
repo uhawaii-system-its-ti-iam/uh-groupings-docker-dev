@@ -1,6 +1,13 @@
 #!/bin/bash
 
 # build.sh - deploy groupings containers with hot source code syncing
+#
+# It all begins here. The Build script requests user input in order to populate
+# the environment variables and then invokes docker-compose to begin building
+# the Vault and Groupings stacks.
+#
+# The build process will create the Vault and Groupings images and put them
+# into their respective stacks.
 
 # Vault access
 export VAULT_URL="http://localhost:8200/v1/cubbyhole/uhgroupings"
@@ -110,7 +117,7 @@ set_mvnw_var "GROUPINGS_UI_DIR"
 echo "Provide the vault token for opening the vault:"
 set_token_var "VAULT_TOKEN"
 
-# Get and set the Grouper API password_json.
+# Get/set the Grouper API password_json.
 echo "Retrieving Grouper API password from the vault..."
 set_password_json_var "VAULT_SECRET_JSON"
 

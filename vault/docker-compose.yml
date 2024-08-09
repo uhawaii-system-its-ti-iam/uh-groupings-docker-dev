@@ -1,5 +1,7 @@
 # docker-compose.yml - UH Groupings Vault - dev environment
 
+# The Build script will invoke Docker to build this stack.
+
 services:
   vault:
     image: hashicorp/vault:latest

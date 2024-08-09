@@ -1,17 +1,17 @@
 # docker-compose.yml - UH Groupings - dev environment
 
+# The Build script will invoke Docker to build this stack.
+
 services:
 
   groupings-base:
     build:
-      context: .
       dockerfile: Dockerfile-base
     image: groupings-base-image
     command: /bin/sh -c "echo 'Groupings project base image built using Rocky Linux 9, OpenJdk 17.'"
 
   groupings-api:
     build:
-      context: .
       dockerfile: Dockerfile-api
     depends_on:
       - groupings-base
@@ -27,10 +27,10 @@ services:
 
   groupings-ui:
     build:
-      context: .
       dockerfile: Dockerfile-ui
-    depends_on:
-      - groupings-api
+  depends_on:
+    groupings-api:
+      condition: service_healthy
     ports:
       - "8080:8080"
     volumes:
@@ -38,3 +38,7 @@ services:
       - ${GROUPINGS_OVERRIDES}:/overrides
     environment:
       - SPRING_PROFILES_ACTIVE=localhost
+      - HEALTH_CHECK_URL="http://localhost:8081/uhgroupingsapi/api/groupings/v2.1/"
+      - HEALTH_CHECK_INTERVAL=30   # Interval between retries in seconds
+      - HEALTH_CHECK_TIMEOUT=10    # Timeout for each curl command in seconds
+      - HEALTH_CHECK_RETRIES=5     # Number of retries before giving up
