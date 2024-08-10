@@ -1,7 +1,7 @@
 # build.ps1 - deploy groupings containers with hot source code syncing
 
 # Vault access
-$env:VAULT_URL = "http://localhost:8200/v1/cubbyhole/uhgroupings"
+$env:VAULT_SECRET_URL = "http://localhost:8200/v1/cubbyhole/uhgroupings"
 $env:VAULT_SECRET_KEY = "grouperClient.webService.password"
 
 # Function: get the Grouper API password data from the vault.
@@ -13,7 +13,7 @@ function Set-PasswordJsonVar {
     Write-Host "Retrieving password from Vault..."
 
     # Assemble curl command as a string
-    $curlCommand = "curl --header `"X-Vault-Token: $env:VAULT_TOKEN`" --header `"Accept: application/json`" --request GET `"$env:VAULT_URL`" --silent --show-error"
+    $curlCommand = "curl --header `"X-Vault-Token: $env:VAULT_TOKEN`" --header `"Accept: application/json`" --request GET `"$env:VAULT_SECRET_URL`" --silent --show-error"
 
     # Execute curl command
     $passwordJson = Invoke-Expression $curlCommand

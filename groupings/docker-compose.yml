@@ -8,7 +8,7 @@ services:
     build:
       dockerfile: Dockerfile-base
     image: groupings-base-image
-    command: /bin/sh -c "echo 'Groupings project base image built using Rocky Linux 9, OpenJdk 17.'"
+    command: /bin/sh -c "echo 'Groupings project base image - built using Rocky Linux 9, OpenJdk 17.'"
 
   groupings-api:
     build:
@@ -28,17 +28,16 @@ services:
   groupings-ui:
     build:
       dockerfile: Dockerfile-ui
-  depends_on:
-    groupings-api:
-      condition: service_healthy
+    depends_on:
+      - groupings-api
     ports:
       - "8080:8080"
     volumes:
       - ${GROUPINGS_UI_DIR}:/app/groupings  # Hot reload directory
       - ${GROUPINGS_OVERRIDES}:/overrides
     environment:
-      - SPRING_PROFILES_ACTIVE=localhost
-      - HEALTH_CHECK_URL="http://localhost:8081/uhgroupingsapi/api/groupings/v2.1/"
+      - SPRING_PROFILES_ACTIVE=dockerhost
+      - HEALTH_CHECK_URL="http://groupings-api:8081/uhgroupingsapi/api/groupings/v2.1/"
       - HEALTH_CHECK_INTERVAL=30   # Interval between retries in seconds
       - HEALTH_CHECK_TIMEOUT=10    # Timeout for each curl command in seconds
       - HEALTH_CHECK_RETRIES=5     # Number of retries before giving up

@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# start-api.sh - Parse the vault secret and start the app
+# start-api.sh - Parse the vault secret and start the Groupings API
 
-# The vault json with the password is parsed here rather than on the localhost
-# to ensure that the jq command is available.
+# The vault's json data with the password is parsed in the container rather than
+# on the localhost to ensure that the jq command is available.
 
 # WARNING: the name of the following environment variable must align with class
 #          GrouperPropertyConfigurer.java in the API project.

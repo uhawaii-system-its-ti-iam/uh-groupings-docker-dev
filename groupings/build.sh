@@ -10,8 +10,23 @@
 # into their respective stacks.
 
 # Vault access
-export VAULT_URL="http://localhost:8200/v1/cubbyhole/uhgroupings"
+export VAULT_URL="http://localhost:8200/ui"
+export VAULT_SECRET_URL="http://localhost:8200/v1/cubbyhole/uhgroupings"
 export VAULT_SECRET_KEY="grouperClient.webService.password"
+
+# Function: check the Vault status.
+check_vault_status() {
+    local http_status
+
+    http_status=$(curl -s -o /dev/null -w "%{http_code}" -I "{$VAULT_URL}")
+
+    if [ "$http_status" -eq 307 ]; then
+      echo "Success: the project vault container is running."
+    else
+      echo "Error: the project vault is NOT available. Review the /vault README. Exiting..."
+      exit 1
+    fi
+}
 
 # Function: get the Grouper API password data from the vault.
 set_password_json_var() {
@@ -21,13 +36,13 @@ set_password_json_var() {
 
     echo "Retrieving password from Vault..."
 
-    # Assemble curl command as a string
+    # Assemble curl command as a string.
     curl_command="curl --header \"X-Vault-Token: ${VAULT_TOKEN}\" \
-  --header \"Accept: application/json\" \
-  --request GET \"${VAULT_URL}\" \
-  --silent --show-error"
+      --header \"Accept: application/json\" \
+      --request GET \"${VAULT_SECRET_URL}\" \
+      --silent --show-error"
 
-    # Execute curl command with eval
+    # Execute curl command with eval.
     password_json=$(eval "${curl_command}")
 
     if [ $? -ne 0 ]; then
@@ -97,6 +112,11 @@ set_token_var() {
 }
 
 echo "-------------------------------------------------------------------------"
+echo "The Vault containers must be running to deploy the Groupings containers."
+
+check_vault_status
+
+echo "-------------------------------------------------------------------------"
 echo "To hot sync localhost source code changes into the containers, provide"
 echo "the paths to your project directories. They are required to hot sync"
 echo "localhost source code changes into the containers."
@@ -107,7 +127,7 @@ echo "Provide the absolute path to the overrides file directory:"
 set_path_var "GROUPINGS_OVERRIDES"
 
 # Set GROUPINGS_API_DIR directory path.
-Echo "Provide the absolute path to the Maven wrapper:"
+Echo "Provide the absolute paths to the Maven wrapper directories:"
 set_mvnw_var "GROUPINGS_API_DIR"
 
 # Set GROUPINGS_UI_DIR directory path.
