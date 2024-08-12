@@ -145,7 +145,7 @@ set_password_json_var "VAULT_SECRET_JSON"
 echo "Building and deploying the Grouping API container..."
 docker-compose up --build -d
 if [ $? -eq 0 ]; then
-    echo "Success: Images built, containers deployed"
+    echo "Success: Groupings images built, containers deployed"
 else
     echo "Error: Review the logs, review the README, etc"
 fi

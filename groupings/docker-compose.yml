@@ -40,4 +40,4 @@ services:
       - HEALTH_CHECK_URL="http://groupings-api:8081/uhgroupingsapi/api/groupings/v2.1/"
       - HEALTH_CHECK_INTERVAL=30   # Interval between retries in seconds
       - HEALTH_CHECK_TIMEOUT=10    # Timeout for each curl command in seconds
-      - HEALTH_CHECK_RETRIES=5     # Number of retries before giving up
+      - HEALTH_CHECK_RETRIES=50     # Number of retries before giving up
