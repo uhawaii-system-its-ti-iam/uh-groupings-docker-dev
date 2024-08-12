@@ -21,3 +21,18 @@ Deploy the containers (for Windows there is a Powershell script).
     cd uh-groupings-docker-dev/groupings
     chmod +x build.sh
     ./build.sh
+
+## Spring Boot Profiles
+
+localhost vs dockerhost
+
+The containerized UI project requires the "dockerhost" profile in order to 
+connect to the containerized API. The containerized API project works fine with
+the "localhost" profile.
+
+## Browser Access to the Containerized Grouping UI
+
+Use your docker desktop client to check that the Grouper containers are 
+running. Enter the following URL into your browser:
+
+    http://localhost:8080/uhgroupings/
