@@ -1,6 +1,6 @@
 # Dockerfile-base - UH Groupings base image builder
 
-FROM rockylinux/rockylinux:9 AS build
+FROM rockylinux/rockylinux:9.4 AS build
 
 RUN dnf -y install dnf-plugins-core epel-release && \
     dnf config-manager --set-enabled && \
