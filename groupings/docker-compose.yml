@@ -1,6 +1,6 @@
 # docker-compose.yml - UH Groupings - dev environment
 
-# The Build script will invoke Docker to build this stack.
+# The build.sh script will invoke Docker to build this stack.
 
 services:
 
@@ -8,7 +8,7 @@ services:
     build:
       dockerfile: Dockerfile-base
     image: groupings-base-image
-    command: /bin/sh -c "echo 'Groupings project base image - built using Rocky Linux 9, OpenJdk 17.'"
+    command: /bin/sh -c "echo 'Groupings project base image - built using Rocky Linux 9.4, OpenJdk 17.'"
 
   groupings-api:
     build:

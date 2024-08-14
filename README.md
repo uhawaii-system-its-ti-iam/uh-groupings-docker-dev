@@ -1,6 +1,9 @@
 # Table of Contents
 <!-- TOC -->
 * [Overview](#overview)
+  * [Anticipated localhost Tool(s)](#anticipated-localhost-tools)
+  * [Questions and Answers](#questions-and-answers)
+  * [Warning for Windows Users](#warning-for-windows-users)
 * [Setting Up](#setting-up)
   * [Spring Boot Hot Updates with DevTools](#spring-boot-hot-updates-with-devtools)
     * [DevTools Key Features](#devtools-key-features)
@@ -22,15 +25,22 @@ The docker stack contains the following:
 2) Groupings API container featuring hot updates.
 3) Groupings UI container featuring hot updates.
 
-Anticipated localhost tools:
+## Work Remaining
+For this project the following work remains to be done:
+1) Determine what should be moved from the overrides file to the Vault, and test.
+2) Determine how best to update the pom file for hot updates, and test.
 
-1) Docker Desktop (and a Docker Hub account)
+## Anticipated localhost Tool(s)
 
-**Is the overrides file still relevant?**
-  Yes. It overrides properties without the danger of the changes ending up in a PR.
+- Docker Desktop (and a Docker Hub account)
 
-**Warning**
-The Powershell scripts are courtesy of genAI and remain to be tested.
+## Questions and Answers
+
+Is the overrides file still relevant? 
+- Yes. It overrides properties without the danger of the changes ending up in a PR.
+
+## Warning for Windows Users
+- The Powershell scripts are courtesy of genAI and remain to be tested.
 
 # Setting Up
 
@@ -67,14 +77,14 @@ Add to Maven pom.xml:
         </dependency>
     </dependencies>
 
-Add to localhost properties file:
+Add to dockerhost properties file:
 
     # Enable automatic restart
     spring.devtools.restart.enabled=true
     # Disable template caches
     spring.thymeleaf.cache=false
 
-It may be necessary to add the following to the localhost properties file in
+It may be necessary to add the following to the dockerhost properties file in
 order to ensure that hot reloading to the container works as expected.
 
     spring.devtools.restart.polling-interval=1000

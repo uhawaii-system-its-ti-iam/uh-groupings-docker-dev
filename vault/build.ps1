@@ -1,3 +1,5 @@
+#!/usr/bin/env pwsh
+
 # build.ps1 - initialize for running vault.
 
 # Check if HOME environment variable is not set.
@@ -7,20 +9,20 @@ if (-not $env:HOME) {
 }
 
 # Create the necessary directories for vault data and configuration.
-$vaultDataPath = Join-Path $env:HOME ".vault/uhgroupings/data"
-$vaultConfigPath = Join-Path $env:HOME ".vault/uhgroupings/config"
+$vaultDataDir = "$env:HOME\.vault\uhgroupings\data"
+$vaultConfigDir = "$env:HOME\.vault\uhgroupings\config"
 
-New-Item -Path $vaultDataPath -ItemType Directory -Force
-New-Item -Path $vaultConfigPath -ItemType Directory -Force
+New-Item -Path $vaultDataDir -ItemType Directory -Force | Out-Null
+New-Item -Path $vaultConfigDir -ItemType Directory -Force | Out-Null
 
 # Ensure any previous vault data is removed to ensure a fresh init.
-if (Get-ChildItem -Path $vaultDataPath | Measure-Object).Count -gt 0 {
+if (Test-Path "$vaultDataDir\*") {
     Write-Host "Info: removed existing vault data to ensure a fresh init."
-    Remove-Item -Path (Join-Path $vaultDataPath "*") -Force
+    Remove-Item "$vaultDataDir\*" -Force
 }
 
 # Copy the Vault configuration file to the appropriate directory.
-Copy-Item -Path "vault-config.hcl" -Destination $vaultConfigPath -Force
+Copy-Item -Path "vault-config.hcl" -Destination $vaultConfigDir -Force -Verbose
 
 # Start the vault container using Docker Compose.
 docker-compose up -d
