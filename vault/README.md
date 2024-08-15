@@ -41,7 +41,8 @@ Prep environment, start container.
 
     cd uh-groupings-docker-dev/vault
     chmod +x build.sh
-    ./build.sh
+    ./build.sh  (Mac)
+    ./build.ps1 (Windows)
 
 ## Vault Setup and Startup
 

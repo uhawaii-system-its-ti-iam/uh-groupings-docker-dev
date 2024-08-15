@@ -20,7 +20,8 @@ Deploy the containers (for Windows there is a Powershell script).
 
     cd uh-groupings-docker-dev/groupings
     chmod +x build.sh
-    ./build.sh
+    ./build.sh  (Mac)
+    ./build.ps1 (Windows)
 
 ## Spring Boot Profiles
 
