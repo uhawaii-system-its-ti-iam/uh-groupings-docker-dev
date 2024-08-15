@@ -14,15 +14,20 @@ $env:VAULT_SECRET_KEY = "grouperClient.webService.password"
 
 # Function: check the Vault status.
 function Check-VaultStatus {
-    $httpStatus = curl -s -o $null -w "%{http_code}" -I "$env:VAULT_URL"
-
-    if ($httpStatus -eq 307) {
-        Write-Host "Success: the project vault container is running."
-    } else {
+    try {
+        $response = Invoke-WebRequest -Uri "$env:VAULT_URL" -Method Head -UseBasicParsing
+        if ($response.StatusCode -eq 200) {
+            Write-Host "Success: the project vault container is running."
+        } else {
+            Write-Host "Error: the project vault is NOT available. Review the /vault README. Exiting..."
+            exit 1
+        }
+    } catch {
         Write-Host "Error: the project vault is NOT available. Review the /vault README. Exiting..."
         exit 1
     }
 }
+
 
 # Function: get the Grouper API password data from the vault.
 function Set-PasswordJsonVar {
