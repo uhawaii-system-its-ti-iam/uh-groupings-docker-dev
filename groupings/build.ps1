@@ -29,26 +29,26 @@ function Check-VaultStatus {
 }
 
 
-# Function: get the Grouper API password data from the vault.
 function Set-PasswordJsonVar {
     param (
         [string]$varName
     )
     Write-Host "Retrieving password from Vault..."
 
-    # Assemble curl command as a string.
-    $curlCommand = "curl --header `"X-Vault-Token: $env:VAULT_TOKEN`" " +
-                   "--header `"Accept: application/json`" " +
-                   "--request GET `" $env:VAULT_SECRET_URL `" " +
-                   "--silent --show-error"
+    # Properly formatted PowerShell command to retrieve data
+    $headers = @{
+        "X-Vault-Token" = $env:VAULT_TOKEN
+        "Accept" = "application/json"
+    }
 
-    # Execute curl command
-    $passwordJson = Invoke-Expression $curlCommand
-
-    if ($LASTEXITCODE -ne 0) {
+    try {
+        $response = Invoke-WebRequest -Uri $env:VAULT_SECRET_URL -Headers $headers -Method Get -UseBasicParsing
+        $passwordJson = $response.Content
+    } catch {
         Write-Host "Error: Failed to communicate with Vault. Exiting..."
         exit 1
     }
+
     if (-not $passwordJson) {
         Write-Host "Error: Failed to retrieve data from Vault. Exiting..."
         exit 1
