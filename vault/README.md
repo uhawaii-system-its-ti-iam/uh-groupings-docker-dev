@@ -37,10 +37,8 @@ The unseal key and the token root token will be needed:
 
 Prep environment, start container.
 
-  For Windows, the chmod step is not applicable.
-
     cd uh-groupings-docker-dev/vault
-    chmod +x build.sh
+    chmod +x build.sh (Mac)
     ./build.sh  (Mac)
     ./build.ps1 (Windows)
 

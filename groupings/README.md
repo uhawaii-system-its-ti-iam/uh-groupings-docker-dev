@@ -14,12 +14,12 @@ effect.
 1. The groupings API and UI projects must already be cloned to the localhost.
 2. The localhost Vault container must be running and contain the Groupings API password. See the vault README for details.
 
-## Linux/macOS/Windows
+# Installation
 
-Deploy the containers (for Windows there is a Powershell script).
+Deploy the containers.
 
     cd uh-groupings-docker-dev/groupings
-    chmod +x build.sh
+    chmod +x build.sh (Mac)
     ./build.sh  (Mac)
     ./build.ps1 (Windows)
 

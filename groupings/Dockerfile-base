@@ -1,4 +1,4 @@
-# Dockerfile-base - UH Groupings base image builder
+# Dockerfile-base - UH Groupings base image build
 
 FROM rockylinux/rockylinux:9.4 AS build
 
