@@ -20,4 +20,4 @@ fi
 # Start the Spring Boot application.
 cd groupings
 
-./mvnw spring-boot:run -Dspring-boot.run.profiles=dockerhost
+./mvnw spring-boot:run -DgrouperClient.webService.password="${GROUPERCLIENT_WEBSERVICE_PASSWORD}"

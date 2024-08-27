@@ -21,6 +21,7 @@ services:
       - ${GROUPINGS_API_DIR}:/app/groupings  # Hot reload directory
       - ${GROUPINGS_OVERRIDES}:/overrides
     environment:
+      - SPRING_PROFILES_ACTIVE=dockerhost
       - VAULT_SECRET_JSON=${VAULT_SECRET_JSON}
       - VAULT_SECRET_KEY=${VAULT_SECRET_KEY}
 
@@ -32,6 +33,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
+      - SPRING_PROFILES_ACTIVE=dockerhost
       - ${GROUPINGS_UI_DIR}:/app/groupings  # Hot reload directory
       - ${GROUPINGS_OVERRIDES}:/overrides
     environment:

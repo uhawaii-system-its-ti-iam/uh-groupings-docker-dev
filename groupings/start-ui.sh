@@ -20,7 +20,7 @@ echo "Health check URL: ${HEALTH_CHECK_URL}"
 # Delay the UI startup until the API startup finishes.
 if check_api_health; then
   cd groupings
-  ./mvnw spring-boot:run -Dspring-boot.run.profiles=dockerhost
+  ./mvnw spring-boot:run
 else
   echo "ERROR: API not found after ${HEALTH_CHECK_RETRIES} attempts."
   exit 1
