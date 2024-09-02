@@ -33,10 +33,10 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - SPRING_PROFILES_ACTIVE=dockerhost
       - ${GROUPINGS_UI_DIR}:/app/groupings  # Hot reload directory
       - ${GROUPINGS_OVERRIDES}:/overrides
     environment:
+      - SPRING_PROFILES_ACTIVE=dockerhost
       - HEALTH_CHECK_URL="http://groupings-api:8081/uhgroupingsapi/api/groupings/v2.1/"
       - HEALTH_CHECK_INTERVAL=30   # Interval between retries in seconds
       - HEALTH_CHECK_TIMEOUT=10    # Timeout for each curl command in seconds
