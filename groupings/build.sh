@@ -28,35 +28,6 @@ check_vault_status() {
     fi
 }
 
-# Function: get the Grouper API password data from the vault.
-set_password_json_var() {
-    local var_name=$1
-    local password_json
-    local curl_command
-
-    echo "Retrieving password from Vault..."
-
-    # Assemble curl command as a string.
-    curl_command="curl --header \"X-Vault-Token: ${VAULT_TOKEN}\" \
-      --header \"Accept: application/json\" \
-      --request GET \"${VAULT_SECRET_URL}\" \
-      --silent --show-error"
-
-    # Execute curl command with eval.
-    password_json=$(eval "${curl_command}")
-
-    if [ $? -ne 0 ]; then
-        echo "Error: Failed to communicate with Vault. Exiting..."
-        exit 1
-    fi
-    if [ -z "${password_json}" ]; then
-        echo "Error: Failed to retrieve data from Vault. Exiting..."
-        exit 1
-    fi
-
-    export "${var_name}=${password_json}"
-}
-
 # Function: validate and set an environment variable with the Maven wrapper
 # directory path.
 set_mvnw_var() {
@@ -97,20 +68,6 @@ set_path_var() {
     export "${var_name}=${var_value}"
 }
 
-# Function: get the vault secret.
-set_token_var() {
-    local var_name=$1
-    local var_value
-
-    read -e -p "Enter ${var_name}: " -r var_value
-
-    if [ -z "${var_value}" ]; then
-        echo "Error: vault secret not found, review the README. Exiting..."
-        exit 1
-    fi
-    export "${var_name}=${var_value}"
-}
-
 echo "-------------------------------------------------------------------------"
 echo "The Vault container must be running to deploy the Groupings containers."
 
@@ -132,14 +89,6 @@ set_mvnw_var "GROUPINGS_API_DIR"
 
 # Set GROUPINGS_UI_DIR directory path.
 set_mvnw_var "GROUPINGS_UI_DIR"
-
-# Set VAULT_TOKEN value.
-echo "Provide the vault token for opening the vault:"
-set_token_var "VAULT_TOKEN"
-
-# Get/set the Grouper API password_json.
-echo "Retrieving Grouper API password from the vault..."
-set_password_json_var "VAULT_SECRET_JSON"
 
 # Build/rebuild and deploy the images.
 echo "Building and deploying the Grouping API container..."

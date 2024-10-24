@@ -3,10 +3,7 @@
 # Use the pre-built base image.
 FROM groupings-base-image AS build
 
-WORKDIR /app
+WORKDIR /app/groupings
 
-# Copy the start script and make it executable.
-COPY start-ui.sh /app/
-RUN chmod +x /app/start-ui.sh
-
-CMD ["/app/start-ui.sh"]
+# Start the Spring Boot application using the environment variable
+CMD ["sh", "-c", "mvn spring-boot:run -Dspring-boot.run.profiles=${SPRING_PROFILES_ACTIVE}"]

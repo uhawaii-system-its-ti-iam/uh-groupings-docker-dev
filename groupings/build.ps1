@@ -28,35 +28,6 @@ function Check-VaultStatus {
     }
 }
 
-
-function Set-PasswordJsonVar {
-    param (
-        [string]$varName
-    )
-    Write-Host "Retrieving password from Vault..."
-
-    # Properly formatted PowerShell command to retrieve data
-    $headers = @{
-        "X-Vault-Token" = $env:VAULT_TOKEN
-        "Accept" = "application/json"
-    }
-
-    try {
-        $response = Invoke-WebRequest -Uri $env:VAULT_SECRET_URL -Headers $headers -Method Get -UseBasicParsing
-        $passwordJson = $response.Content
-    } catch {
-        Write-Host "Error: Failed to communicate with Vault. Exiting..."
-        exit 1
-    }
-
-    if (-not $passwordJson) {
-        Write-Host "Error: Failed to retrieve data from Vault. Exiting..."
-        exit 1
-    }
-
-    Set-Item -Path "Env:\$varName" -Value $passwordJson
-}
-
 # Function: validate and set an environment variable with the Maven wrapper
 # directory path.
 function Set-MvnwVar {
@@ -97,20 +68,6 @@ function Set-PathVar {
     Set-Item -Path "Env:\$varName" -Value $varValue
 }
 
-# Function: get the vault secret.
-function Set-TokenVar {
-    param (
-        [string]$varName
-    )
-    $varValue = Read-Host "Enter $varName"
-
-    if (-not $varValue) {
-        Write-Host "Error: vault secret not found, review the README. Exiting..."
-        exit 1
-    }
-    Set-Item -Path "Env:\$varName" -Value $varValue
-}
-
 Write-Host "-------------------------------------------------------------------------"
 Write-Host "The Vault container must be running to deploy the Groupings containers."
 
@@ -132,14 +89,6 @@ Set-MvnwVar "GROUPINGS_API_DIR"
 
 # Set GROUPINGS_UI_DIR directory path.
 Set-MvnwVar "GROUPINGS_UI_DIR"
-
-# Set VAULT_TOKEN value.
-Write-Host "Provide the vault token for opening the vault:"
-Set-TokenVar "VAULT_TOKEN"
-
-# Get/set the Grouper API password_json.
-Write-Host "Retrieving Grouper API password from the vault..."
-Set-PasswordJsonVar "VAULT_SECRET_JSON"
 
 # Build/rebuild and deploy the images.
 Write-Host "Building and deploying the Grouping API container..."

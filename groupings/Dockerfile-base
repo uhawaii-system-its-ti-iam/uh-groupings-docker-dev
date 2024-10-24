@@ -2,10 +2,12 @@
 
 FROM rockylinux/rockylinux:9.4 AS build
 
-RUN dnf -y install dnf-plugins-core epel-release && \
+# Install necessary packages including Maven, Java
+RUN dnf -y update && \
+    dnf -y install dnf-plugins-core epel-release && \
     dnf config-manager --set-enabled && \
     dnf -y module enable maven && \
-    dnf -y install maven jq java-17-openjdk java-17-openjdk-devel && \
+    dnf -y install maven java-17-openjdk java-17-openjdk-devel && \
     dnf clean all
 
 # Set Java 17 as the default version and set JAVA_HOME.
@@ -17,5 +19,5 @@ RUN alternatives --install /usr/bin/java java /usr/lib/jvm/java-17-openjdk/bin/j
     export PATH=$JAVA_HOME/bin:$PATH
 
 # Persist JAVA_HOME and PATH environment variables.
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk
-ENV PATH=$JAVA_HOME/bin:$PATH
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk \
+    PATH=$JAVA_HOME/bin:$PATH
