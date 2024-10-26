@@ -19,7 +19,7 @@ services:
     volumes:
       - ${GROUPINGS_API_DIR}:/app/groupings # Hot reload directory
       - ${GROUPINGS_OVERRIDES}:/overrides
-      - /root/.m2:/root/.m2  # Cache Maven dependencies and hot reload updated dependencies
+      - ${HOME}/.m2:/root/.m2  # Cache Maven dependencies and hot reload updated dependencies
     environment:
       - SPRING_PROFILES_ACTIVE=dockerhost
       - spring.config.import=optional:file:/overrides/uh-groupings-api-overrides.properties, vault://cubbyhole/uhgroupings
@@ -38,7 +38,7 @@ services:
     volumes:
       - ${GROUPINGS_UI_DIR}:/app/groupings  # Hot reload directory
       - ${GROUPINGS_OVERRIDES}:/overrides
-      - /root/.m2:/root/.m2  # Cache Maven dependencies and hot reload updated dependencies
+      - ${HOME}/.m2:/root/.m2  # Cache Maven dependencies and hot reload updated dependencies
     environment:
       - SPRING_PROFILES_ACTIVE=dockerhost
       - SPRING_DEVTOOLS_RESTART_ENABLED=true
