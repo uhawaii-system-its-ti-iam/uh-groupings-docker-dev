@@ -68,6 +68,12 @@ function Set-PathVar {
     Set-Item -Path "Env:\$varName" -Value $varValue
 }
 
+# To match environment variables between MacOS and WindowsOS
+$env:HOME = $env:USERPROFILE
+Write-Host "Info: HOME environment variable is set to USERPROFILE"
+$env:USER = $env:USERNAME
+Write-Host "Info: USER environment variable is set to USERNAME"
+
 Write-Host "-------------------------------------------------------------------------"
 Write-Host "The Vault container must be running to deploy the Groupings containers."
 
@@ -79,10 +85,6 @@ Write-Host "the paths to your project directories. They are required to hot sync
 Write-Host "localhost source code changes into the containers."
 Write-Host "-------------------------------------------------------------------------"
 
-# Set GROUPINGS_OVERRIDES directory path.
-Write-Host "Provide the absolute path to the overrides file directory:"
-Set-PathVar "GROUPINGS_OVERRIDES"
-
 # Set GROUPINGS_API_DIR directory path.
 Write-Host "Provide the absolute paths to the Maven wrapper directories:"
 Set-MvnwVar "GROUPINGS_API_DIR"
@@ -93,6 +95,7 @@ Set-MvnwVar "GROUPINGS_UI_DIR"
 # Build/rebuild and deploy the images.
 Write-Host "Building and deploying the Grouping API container..."
 docker-compose up --build -d
+
 if ($LASTEXITCODE -eq 0) {
     Write-Host "Success: Groupings images built, stack and containers deployed"
 } else {
