@@ -2,11 +2,9 @@
 
 # build.ps1 - initialize for running vault.
 
-# Check if HOME environment variable is not set and set it to USERPROFILE if necessary.
-if (-not $env:HOME) {
-    $env:HOME = $env:USERPROFILE
-    Write-Host "Info: HOME environment variable was not set. Set it to USERPROFILE: $env:HOME"
-}
+$env:HOME = $env:USERPROFILE
+Write-Host "Info: HOME environment variable is set to USERPROFILE"
+
 
 # Create the necessary directories for vault data and configuration.
 $vaultDataDir = "$env:HOME\.vault\uhgroupings\data"

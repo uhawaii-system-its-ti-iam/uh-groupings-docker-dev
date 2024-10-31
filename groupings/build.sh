@@ -79,10 +79,6 @@ echo "the paths to your project directories. They are required to hot sync"
 echo "localhost source code changes into the containers."
 echo "-------------------------------------------------------------------------"
 
-# Set GROUPINGS_OVERRIDES directory path.
-echo "Provide the absolute path to the overrides file directory:"
-set_path_var "GROUPINGS_OVERRIDES"
-
 # Set GROUPINGS_API_DIR directory path.
 Echo "Provide the absolute paths to the Maven wrapper directories:"
 set_mvnw_var "GROUPINGS_API_DIR"
@@ -93,6 +89,7 @@ set_mvnw_var "GROUPINGS_UI_DIR"
 # Build/rebuild and deploy the images.
 echo "Building and deploying the Grouping API container..."
 docker-compose up --build -d
+
 if [ $? -eq 0 ]; then
     echo "Success: Groupings images built, stack and containers deployed"
 else
