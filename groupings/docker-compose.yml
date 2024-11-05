@@ -18,8 +18,7 @@ services:
       - "8081:8081"
     volumes:
       - ${GROUPINGS_API_DIR}:/app/groupings # Hot reload directory
-      - ${HOME}/.${USER}-conf:/overrides
-      - ${HOME}/.m2:/root/.m2  # Cache Maven dependencies and hot reload updated dependencies
+      - ${USERPROFILE}/.${USERNAME}-conf:/overrides
     environment:
       - SPRING_PROFILES_ACTIVE=dockerhost
       - spring.config.import=optional:file:/overrides/uh-groupings-api-overrides.properties, vault://cubbyhole/uhgroupings
@@ -37,11 +36,9 @@ services:
       - "8080:8080"
     volumes:
       - ${GROUPINGS_UI_DIR}:/app/groupings  # Hot reload directory
-      - ${HOME}/.${USER}-conf:/overrides
-      - ${HOME}/.m2:/root/.m2  # Cache Maven dependencies and hot reload updated dependencies
+      - ${USERPROFILE}/.${USERNAME}-conf:/overrides
     environment:
       - SPRING_PROFILES_ACTIVE=dockerhost
-      - SPRING_DEVTOOLS_RESTART_ENABLED=true
       - HEALTH_CHECK_URL="http://groupings-api:8081/uhgroupingsapi/api/groupings/v2.1/"
       - HEALTH_CHECK_INTERVAL=30   # Interval between retries in seconds
       - HEALTH_CHECK_TIMEOUT=10    # Timeout for each curl command in seconds
