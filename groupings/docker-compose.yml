@@ -41,7 +41,6 @@ services:
       - ${HOME}/.m2:/root/.m2  # Cache Maven dependencies and hot reload updated dependencies
     environment:
       - SPRING_PROFILES_ACTIVE=dockerhost
-      - SPRING_DEVTOOLS_RESTART_ENABLED=true
       - HEALTH_CHECK_URL="http://groupings-api:8081/uhgroupingsapi/api/groupings/v2.1/"
       - HEALTH_CHECK_INTERVAL=30   # Interval between retries in seconds
       - HEALTH_CHECK_TIMEOUT=10    # Timeout for each curl command in seconds
