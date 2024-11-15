@@ -68,12 +68,6 @@ function Set-PathVar {
     Set-Item -Path "Env:\$varName" -Value $varValue
 }
 
-# To match environment variables between MacOS and WindowsOS
-$env:HOME = $env:USERPROFILE
-Write-Host "Info: HOME environment variable is set to USERPROFILE"
-$env:USER = $env:USERNAME
-Write-Host "Info: USER environment variable is set to USERNAME"
-
 Write-Host "-------------------------------------------------------------------------"
 Write-Host "The Vault container must be running to deploy the Groupings containers."
 

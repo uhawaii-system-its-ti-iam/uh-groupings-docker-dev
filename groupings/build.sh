@@ -79,6 +79,13 @@ echo "the paths to your project directories. They are required to hot sync"
 echo "localhost source code changes into the containers."
 echo "-------------------------------------------------------------------------"
 
+
+# To match environment variables between MacOS and WindowsOS
+export USERPROFILE=${HOME}
+echo "Info: USERPROFILE environment variable is set to HOME"
+export USERNAME=${USER}
+echo "Info: USERNAME environment variable is set to USER"
+
 # Set GROUPINGS_API_DIR directory path.
 Echo "Provide the absolute paths to the Maven wrapper directories:"
 set_mvnw_var "GROUPINGS_API_DIR"
