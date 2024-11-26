@@ -6,6 +6,9 @@
 # the environment variables and then invokes docker-compose to begin building
 # the Vault and Groupings stacks.
 #
+# The bash file will check ui directory that user provides
+# and decide which docker compose file will be used: angular or react
+#
 # The build process will create the Vault and Groupings images and put them
 # into their respective stacks.
 
@@ -68,6 +71,20 @@ set_path_var() {
     export "${var_name}=${var_value}"
 }
 
+# Function: Detect UI project type (Spring Boot or Node.js)
+get_ui_project_type() {
+    local ui_dir=$1
+    
+    if [[ -f "${ui_dir}/package.json" || -f "${ui_dir}/package-lock.json" ]]; then
+        echo "node"
+    elif [[ -f "${ui_dir}/pom.xml" ]]; then
+        echo "spring"
+    else
+        echo "Error: Could not determine UI project type. Neither package.json/package-lock.json nor pom.xml found. Exiting..."
+        exit 1
+    fi
+}
+
 echo "-------------------------------------------------------------------------"
 echo "The Vault container must be running to deploy the Groupings containers."
 
@@ -79,7 +96,6 @@ echo "the paths to your project directories. They are required to hot sync"
 echo "localhost source code changes into the containers."
 echo "-------------------------------------------------------------------------"
 
-
 # To match environment variables between MacOS and WindowsOS
 export USERPROFILE=${HOME}
 echo "Info: USERPROFILE environment variable is set to HOME"
@@ -87,20 +103,30 @@ export USERNAME=${USER}
 echo "Info: USERNAME environment variable is set to USER"
 
 # Set GROUPINGS_API_DIR directory path.
-Echo "Provide the absolute paths to the Maven wrapper directories:"
+echo "Provide the absolute paths to the Maven wrapper directories:"
 set_mvnw_var "GROUPINGS_API_DIR"
 
 # Set GROUPINGS_UI_DIR directory path.
-set_mvnw_var "GROUPINGS_UI_DIR"
+echo "Provide the absolute path to the UI directory:"
+set_path_var "GROUPINGS_UI_DIR"
+
+# Detect UI project type and use appropriate compose file
+ui_type=$(get_ui_project_type "$GROUPINGS_UI_DIR")
+if [ "$ui_type" = "node" ]; then
+    compose_file="docker-compose-react.yml"
+else
+    compose_file="docker-compose-angular.yml"
+fi
 
 # Build/rebuild and deploy the images.
-echo "Building and deploying the Grouping API container..."
-docker-compose up --build -d
+echo "Building and deploying the Grouping API container using $compose_file..."
+docker-compose -f "$compose_file" up --build -d
 
 if [ $? -eq 0 ]; then
     echo "Success: Groupings images built, stack and containers deployed"
 else
     echo "Error: Review the logs, review the README, etc"
+    exit 1
 fi
 
 exit 0

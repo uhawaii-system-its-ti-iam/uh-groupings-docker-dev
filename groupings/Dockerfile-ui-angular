@@ -1,4 +1,4 @@
-# Dockerfile-ui - UH Groupings UI - also enable hot updates
+# Dockerfile-ui-angular - UH Groupings UI - also enable hot updates
 
 # Use the pre-built base image.
 FROM groupings-base-image AS build
