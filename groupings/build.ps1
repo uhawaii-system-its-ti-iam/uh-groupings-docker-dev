@@ -4,6 +4,9 @@
 # the environment variables and then invokes docker-compose to begin building
 # the Vault and Groupings stacks.
 #
+# The bash file will check ui directory that user provides
+# and decide which docker compose file will be used: angular or react
+#
 # The build process will create the Vault and Groupings images and put them
 # into their respective stacks.
 
@@ -68,6 +71,22 @@ function Set-PathVar {
     Set-Item -Path "Env:\$varName" -Value $varValue
 }
 
+# Function: Detect UI project type (Spring Boot or Node.js)
+function Get-UIProjectType {
+    param (
+        [string]$uiDir
+    )
+    
+    if ((Test-Path -Path "$uiDir/package.json") -or (Test-Path -Path "$uiDir/package-lock.json")) {
+        return "node"
+    } elseif (Test-Path -Path "$uiDir/pom.xml") {
+        return "spring"
+    } else {
+        Write-Host "Error: Could not determine UI project type. Neither package.json/package-lock.json nor pom.xml found. Exiting..."
+        exit 1
+    }
+}
+
 Write-Host "-------------------------------------------------------------------------"
 Write-Host "The Vault container must be running to deploy the Groupings containers."
 
@@ -84,11 +103,16 @@ Write-Host "Provide the absolute paths to the Maven wrapper directories:"
 Set-MvnwVar "GROUPINGS_API_DIR"
 
 # Set GROUPINGS_UI_DIR directory path.
-Set-MvnwVar "GROUPINGS_UI_DIR"
+Write-Host "Provide the absolute path to the UI directory:"
+Set-PathVar "GROUPINGS_UI_DIR"
+
+# Detect UI project type and use appropriate compose file
+$uiType = Get-UIProjectType $env:GROUPINGS_UI_DIR
+$composeFile = if ($uiType -eq "node") { "docker-compose-react.yml" } else { "docker-compose-angular.yml" }
 
 # Build/rebuild and deploy the images.
-Write-Host "Building and deploying the Grouping API container..."
-docker-compose up --build -d
+Write-Host "Building and deploying the Grouping API container using $composeFile..."
+docker-compose -f $composeFile up --build -d
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host "Success: Groupings images built, stack and containers deployed"

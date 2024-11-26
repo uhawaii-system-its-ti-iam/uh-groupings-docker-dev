@@ -1,0 +1,10 @@
+# Dockerfile-ui-react - UH Groupings UI - also enable hot updates from the editor in local machine
+
+# Use the node
+FROM node:21-alpine
+
+WORKDIR /app/groupings/ui
+
+# Install development dependencies when container starts
+# This allows for hot-reloading as the source code is mounted as a volume
+CMD ["sh", "-c", "npm install && npm run ${NODE_PROFILES_ACTIVE}"]

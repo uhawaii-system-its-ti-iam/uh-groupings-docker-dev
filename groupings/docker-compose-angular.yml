@@ -1,6 +1,6 @@
-# docker-compose.yml - UH Groupings - docker dev environment
+# docker-compose.angular.yml - UH Groupings - docker dev environment for angular project
 
-# The build.sh script will invoke Docker to build this stack.
+# The build.sh or build.ps1 script will invoke Docker to build this stack.
 
 services:
   groupings-base:
@@ -27,9 +27,9 @@ services:
 #       spring.cloud.vault.token= xxx.xxxxxxxxxxxxxxxxxxxx
 #       The property above should be in the uh-groupings-api.override properties file of your local machine ({user.name}.conf directory)
 
-  groupings-ui:
+  groupings-ui-angular:
     build:
-      dockerfile: Dockerfile-ui
+      dockerfile: Dockerfile-ui-angular
     depends_on:
       - groupings-api
     ports:

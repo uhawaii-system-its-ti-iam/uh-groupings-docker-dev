@@ -1,0 +1,47 @@
+# docker-compose.yml - UH Groupings - docker dev environment for next js project
+
+# The build.sh or build.ps1 script will invoke Docker to build this stack.
+
+services:
+  groupings-base:
+    build:
+      dockerfile: Dockerfile-base
+    image: groupings-base-image
+    command: /bin/sh -c "echo 'Groupings project base image - built using Rocky Linux 9.4, OpenJdk 17.'"
+
+  groupings-api:
+    build:
+      dockerfile: Dockerfile-api
+    depends_on:
+      - groupings-base
+    ports:
+      - "8081:8081"
+    volumes:
+      - ${GROUPINGS_API_DIR}:/app/groupings # Hot reload directory
+      - ${USERPROFILE}/.${USERNAME}-conf:/overrides
+    environment:
+      - SPRING_PROFILES_ACTIVE=dockerhost
+      - spring.config.import=optional:file:/overrides/uh-groupings-api-overrides.properties, vault://cubbyhole/uhgroupings
+      - spring.cloud.vault.enabled=true
+      - spring.cloud.vault.uri=http://host.docker.internal:8200
+#       spring.cloud.vault.token= xxx.xxxxxxxxxxxxxxxxxxxx
+#       The property above should be in the uh-groupings-api.override properties file of your local machine ({user.name}.conf directory)
+
+  groupings-ui-react:
+    build:
+      dockerfile: Dockerfile-ui-react
+    depends_on:
+      - groupings-api
+    ports:
+      - "8080:8080"
+    volumes:
+      - ${GROUPINGS_UI_DIR}:/app/groupings  # Hot reload directory
+      - ${USERPROFILE}/.${USERNAME}-conf:/overrides
+    environment:
+      - NODE_PROFILES_ACTIVE=dev
+      # Override NEXT_PUBLIC_API_2_1_BASE_URL for checking api handshake within docker containers
+      - NEXT_PUBLIC_API_2_1_BASE_URL=http://groupings-api:8081/uhgroupingsapi/api/groupings/v2.1
+      - HEALTH_CHECK_URL=http://groupings-api:8081/uhgroupingsapi/api/groupings/v2.1/
+      - HEALTH_CHECK_INTERVAL=30   # Interval between retries in seconds
+      - HEALTH_CHECK_TIMEOUT=10    # Timeout for each curl command in seconds
+      - HEALTH_CHECK_RETRIES=50     # Number of retries before giving up
