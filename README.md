@@ -39,9 +39,6 @@ For this project the following work remains to be done:
 Is the overrides file still relevant? 
 - Yes. It overrides properties without the danger of the changes ending up in a PR.
 
-## Warning for Windows Users
-- The Powershell scripts are courtesy of genAI and remain to be tested.
-
 # Setting Up
 
 ## Spring Boot Hot Updates with DevTools
