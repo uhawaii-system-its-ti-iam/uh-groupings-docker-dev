@@ -1,10 +1,21 @@
-# Dockerfile-ui-react - UH Groupings UI - also enable hot updates from the editor in local machine
+# Dockerfile-ui-react - UH Groupings UI - enable hot updates from the editor in local machine
 
-# Use the node
+# Use Node image
 FROM node:21-alpine
 
+# Username will be provided by docker-compose (matches host machine username)
+ARG USERNAME
+
+# Create a non-root user inside the container
+RUN addgroup -S ${USERNAME} \
+    && adduser -S ${USERNAME} -G ${USERNAME}
+
+# Set working directory
 WORKDIR /app/groupings/ui
 
+# Switch to the non-root user
+USER ${USERNAME}
+
 # Install development dependencies when container starts
-# This allows for hot-reloading as the source code is mounted as a volume
+# This allows hot-reloading because the source code is mounted as a volume
 CMD ["sh", "-c", "npm install && npm run ${NODE_PROFILES_ACTIVE}"]
