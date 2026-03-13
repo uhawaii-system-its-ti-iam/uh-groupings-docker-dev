@@ -5,8 +5,7 @@ FROM rockylinux/rockylinux:9.4 AS build
 # Install necessary packages including Maven, Java
 RUN dnf -y update && \
     dnf -y install dnf-plugins-core epel-release && \
-    dnf config-manager --set-enabled && \
-    dnf -y module enable maven && \
+    dnf config-manager --set-enabled crb && \
     dnf -y install maven java-17-openjdk java-17-openjdk-devel && \
     dnf clean all
 

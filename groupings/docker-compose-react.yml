@@ -30,13 +30,15 @@ services:
   groupings-ui-react:
     build:
       dockerfile: Dockerfile-ui-react
+      args:
+        USERNAME: ${USERNAME}
     depends_on:
       - groupings-api
     ports:
       - "8080:8080"
     volumes:
       - ${GROUPINGS_UI_DIR}:/app/groupings  # Hot reload directory
-      - ${USERPROFILE}/.${USERNAME}-conf:/overrides
+      - ${USERPROFILE}/.${USERNAME}-conf:/home/${USERNAME}/.${USERNAME}-conf
     environment:
       - NODE_PROFILES_ACTIVE=dev
       # Override NEXT_PUBLIC_API_2_1_BASE_URL for checking api handshake within docker containers
