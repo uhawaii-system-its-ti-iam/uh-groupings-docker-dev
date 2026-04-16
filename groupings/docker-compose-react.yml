@@ -24,8 +24,8 @@ services:
       - spring.config.import=optional:file:/overrides/uh-groupings-api-overrides.properties, vault://cubbyhole/uhgroupings
       - spring.cloud.vault.enabled=true
       - spring.cloud.vault.uri=http://host.docker.internal:8200
-#       spring.cloud.vault.token= xxx.xxxxxxxxxxxxxxxxxxxx
-#       The property above should be in the uh-groupings-api.override properties file of your local machine ({user.name}.conf directory)
+  #       spring.cloud.vault.token= xxx.xxxxxxxxxxxxxxxxxxxx
+  #       The property above should be in the uh-groupings-api.override properties file of your local machine ({user.name}.conf directory)
 
   groupings-ui-react:
     build:
