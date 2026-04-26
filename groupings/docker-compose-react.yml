@@ -19,6 +19,8 @@ services:
     volumes:
       - ${GROUPINGS_API_DIR}:/app/groupings # Hot reload directory
       - ${USERPROFILE}/.${USERNAME}-conf:/overrides
+      - maven_cache:/root/.m2  # Named volume for Maven dependencies cache
+      - maven_target:/app/groupings/target  # Named volume for Maven build artifacts
     environment:
       - SPRING_PROFILES_ACTIVE=dockerhost
       - spring.config.import=optional:file:/overrides/uh-groupings-api-overrides.properties, vault://cubbyhole/uhgroupings
@@ -38,6 +40,8 @@ services:
       - "8080:8080"
     volumes:
       - ${GROUPINGS_UI_DIR}:/app/groupings  # Hot reload directory
+      - node_modules:/app/groupings/ui/node_modules  # Named volume for caching node_modules
+      - next_cache:/app/groupings/ui/.next  # Named volume for Next.js build cache
       - ${USERPROFILE}/.${USERNAME}-conf:/home/${USERNAME}/.${USERNAME}-conf
     environment:
       - NODE_PROFILES_ACTIVE=dev
@@ -47,3 +51,9 @@ services:
       - HEALTH_CHECK_INTERVAL=30   # Interval between retries in seconds
       - HEALTH_CHECK_TIMEOUT=10    # Timeout for each curl command in seconds
       - HEALTH_CHECK_RETRIES=50     # Number of retries before giving up
+
+volumes:
+  node_modules:
+  next_cache:
+  maven_cache:
+  maven_target:
