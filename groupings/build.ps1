@@ -10,24 +10,35 @@
 # The build process will create the Vault and Groupings images and put them
 # into their respective stacks.
 
-# Vault access (used only by Check-VaultStatus below; secret path/key are
-# documented in vault/README.md and consumed by the Spring API at runtime).
-$env:VAULT_URL = "http://localhost:8200/ui"
+# Vault readiness: GET /v1/sys/health (secret path/KV setup: vault/README.md).
+$env:VAULT_HEALTH_URL = "http://127.0.0.1:8200/v1/sys/health"
 
 # Function: check the Vault status.
 function Check-VaultStatus {
-    try {
-        $response = Invoke-WebRequest -Uri "$env:VAULT_URL" -Method Head -UseBasicParsing
-        if ($response.StatusCode -eq 200) {
-            Write-Host "Success: the project vault container is running."
-        } else {
-            Write-Host "Error: the project vault is NOT available. Review the /vault README. Exiting..."
-            exit 1
-        }
-    } catch {
+    $healthUrl = $env:VAULT_HEALTH_URL
+    $httpCode = (& curl.exe -s -o NUL -w "%{http_code}" $healthUrl 2>$null)
+    if ($null -ne $httpCode) {
+        $httpCode = $httpCode.Trim()
+    }
+    if (-not $httpCode) {
         Write-Host "Error: the project vault is NOT available. Review the /vault README. Exiting..."
         exit 1
     }
+    $ok = @("200", "429", "472", "473")
+    if ($ok -contains $httpCode) {
+        Write-Host "Success: the project vault container is running."
+        return
+    }
+    if ($httpCode -eq "501") {
+        Write-Host "Error: Vault is not initialized. Initialize Vault before deploying Groupings. See the /vault README."
+        exit 1
+    }
+    if ($httpCode -eq "503") {
+        Write-Host "Error: Vault is sealed. Unseal Vault before deploying Groupings. See the /vault README."
+        exit 1
+    }
+    Write-Host "Error: the project vault is NOT available (HTTP $httpCode). Review the /vault README. Exiting..."
+    exit 1
 }
 
 # Function: validate and set an environment variable with the Maven wrapper

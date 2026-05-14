@@ -13,11 +13,8 @@ $vaultConfigDir = "$env:HOME\.vault\uhgroupings\config"
 New-Item -Path $vaultDataDir -ItemType Directory -Force | Out-Null
 New-Item -Path $vaultConfigDir -ItemType Directory -Force | Out-Null
 
-# Ensure any previous vault data is removed to ensure a fresh init.
-if (Test-Path "$vaultDataDir\*") {
-    Write-Host "Info: removed existing vault data to ensure a fresh init."
-    Remove-Item "$vaultDataDir\*" -Force
-}
+# Vault data under ~/.vault/uhgroupings/data is persisted across runs.
+# To wipe storage and start over, use ./reset-vault.ps1 from this directory.
 
 # Copy the Vault configuration file to the appropriate directory.
 Copy-Item -Path "vault-config.hcl" -Destination $vaultConfigDir -Force -Verbose

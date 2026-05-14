@@ -12,22 +12,32 @@
 # The build process will create the Vault and Groupings images and put them
 # into their respective stacks.
 
-# Vault access (used only by check_vault_status below; secret path/key are
-# documented in vault/README.md and consumed by the Spring API at runtime).
-export VAULT_URL="http://localhost:8200/ui"
+# Vault readiness: GET /v1/sys/health (secret path/KV setup: vault/README.md).
+export VAULT_HEALTH_URL="http://127.0.0.1:8200/v1/sys/health"
 
 # Function: check the Vault status.
 check_vault_status() {
     local http_status
 
-    http_status=$(curl -s -o /dev/null -w "%{http_code}" -I "{$VAULT_URL}")
+    http_status=$(curl -s -o /dev/null -w "%{http_code}" "${VAULT_HEALTH_URL}" || echo "000")
 
-    if [ "$http_status" -eq 307 ]; then
-      echo "Success: the project vault container is running."
-    else
-      echo "Error: the project vault is NOT available. Review the /vault README. Exiting..."
-      exit 1
-    fi
+    case "${http_status}" in
+        200|429|472|473)
+            echo "Success: the project vault container is running."
+            ;;
+        501)
+            echo "Error: Vault is not initialized. Initialize Vault before deploying Groupings. See the /vault README."
+            exit 1
+            ;;
+        503)
+            echo "Error: Vault is sealed. Unseal Vault before deploying Groupings. See the /vault README."
+            exit 1
+            ;;
+        *)
+            echo "Error: the project vault is NOT available (HTTP ${http_status}). Review the /vault README. Exiting..."
+            exit 1
+            ;;
+    esac
 }
 
 # Function: validate and set an environment variable with the Maven wrapper
