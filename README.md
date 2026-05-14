@@ -107,7 +107,7 @@ Groupings containers are created.
 
     cd vault
 
-And review the README provided.
+Review the `vault/README.md` there. It covers KV secret setup at `kv/uhgroupings`, how Vault data **persists** under your home directory across container restarts, how to **reset** storage with `reset-vault.sh` / `reset-vault.ps1` when you need a full re-init, localhost binding, and how **readiness** (`/v1/sys/health`) and Vault states interact with the Groupings build scripts.
 
 ## Set up the Groupings API and UI
 

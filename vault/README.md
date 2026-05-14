@@ -4,6 +4,9 @@
 * [Table of Contents](#table-of-contents)
 * [Overview](#overview)
   * [Why KV instead of cubbyhole](#why-kv-instead-of-cubbyhole)
+  * [Data persistence and reset](#data-persistence-and-reset)
+  * [Network access and TLS (development only)](#network-access-and-tls-development-only)
+  * [Expected Vault states (Groupings scripts)](#expected-vault-states-groupings-scripts)
   * [Reminder to unseal the vault](#reminder-to-unseal-the-vault)
 * [Installation](#installation)
   * [Vault Setup and Startup](#vault-setup-and-startup)
@@ -46,6 +49,40 @@ KV stores secrets at a shared path. Access is controlled by **policies**, so an
 operator can write the secret with a root (or admin) token while the API uses a
 separate read-only token in `uh-groupings-api-overrides.properties`.
 
+## Data persistence and reset
+
+Vault file storage lives under your home directory:
+
+- macOS / Linux: `~/.vault/uhgroupings/data`
+- Windows: `%USERPROFILE%\.vault\uhgroupings\data`
+
+Running `./build.sh` or `./build.ps1` from this directory creates the data and config folders if needed and **does not** delete existing storage. Secrets, tokens on disk, and initialization therefore survive stopping and restarting the container (you still need to **unseal** after each restart; see below).
+
+To wipe Vault storage and start from a clean slate (destructive—you must run `vault operator init` again and keep new unseal keys and root token):
+
+1. From `uh-groupings-docker-dev/vault/`, run the reset script for your OS and confirm the prompt:
+   - macOS / Linux: `chmod +x reset-vault.sh` once if needed, then `./reset-vault.sh`
+   - Windows: `./reset-vault.ps1`
+2. Start Vault again with `./build.sh` or `./build.ps1`, then initialize and unseal as in [Vault Setup and Startup](#vault-setup-and-startup).
+
+`docker-compose.yml` mounts this path into the container; do not rely on manual `rm` unless you know what you are removing.
+
+## Network access and TLS (development only)
+
+Docker Compose maps Vault to **127.0.0.1:8200** on the host, so it is not exposed on all interfaces. The UI and API remain reachable from your machine at `http://localhost:8200` or `http://127.0.0.1:8200`.
+
+`vault-config.hcl` disables TLS for local development only. This layout is **not** suitable for production; production deployments should use proper TLS and hardening.
+
+## Expected Vault states (Groupings scripts)
+
+Before building Groupings containers, `groupings/build.sh` and `groupings/build.ps1` call `GET http://127.0.0.1:8200/v1/sys/health`. Typical outcomes:
+
+| HTTP status | Meaning (dev) |
+|-------------|----------------|
+| 200, 429, 472, 473 | Vault is up in a state where deploy can proceed (active, standby, or replication-related roles). |
+| 503 | Sealed—unseal before deploying Groupings. |
+| 501 | Not initialized—run `vault operator init` (and unseal) first. |
+
 ## Reminder to unseal the vault
 
 Each time the vault container is restarted the vault will need to be unsealed.
@@ -61,6 +98,8 @@ Prep environment, start container.
     chmod +x build.sh (Mac)
     ./build.sh  (Mac)
     ./build.ps1 (Windows)
+
+On macOS or Linux, `docker-compose.yml` uses the `USERPROFILE` variable for bind mounts. If your shell does not set it, run `export USERPROFILE="$HOME"` in that terminal before `./build.sh` so the mount path matches `~/.vault/uhgroupings/`.
 
 ## Vault Setup and Startup
 
@@ -105,9 +144,9 @@ that is fine.
 ## Store the Grouper API Password
 
 Important vault values referenced throughout this README and by the Groupings
-API at runtime (the Groupings build scripts only use `VAULT_URL` for a liveness
-check; the values below are consumed by the Spring API and by manual `vault`
-CLI / `curl` commands):
+API at runtime (the Groupings build scripts call `/v1/sys/health` for readiness;
+the values below are consumed by the Spring API and by manual `vault` CLI /
+`curl` commands):
 
 - Vault path:   `kv/uhgroupings` (Spring: `vault://kv/uhgroupings`)
 - Password key: `grouperClient.webService.password`
@@ -151,8 +190,8 @@ For local development only, using the root token in overrides also works if it
 can read KV. A dedicated read token is recommended so the API does not need the
 same token that wrote the secret.
 
-After **re-init** or running `build.sh` when it wipes vault data: obtain a new
-root token, re-enable KV, run `vault kv put` again, update overrides with a new
+After **re-init** or using `reset-vault.sh` / `reset-vault.ps1`: obtain a new root
+token, re-enable KV, run `vault kv put` again, update overrides with a new
 token, and restart the Groupings API container.
 
 ### With the web UI
@@ -207,11 +246,7 @@ You must have a dockerhub access token in order to download docker images from D
 
 This requires starting over.
 
-1) Stop the container
-2) Delete the vault data (see below)
-3) Start the container
-4) Initialize the vault
-5) Unseal, enable KV, write `kv/uhgroupings`, create policy/token, update overrides
-
-
-    rm -rf ${HOME}/.vault/uhgroupings/data/*
+1) From this directory, run `./reset-vault.sh` (macOS / Linux) or `./reset-vault.ps1` (Windows) to stop the stack and clear persisted data (or remove `~/.vault/uhgroupings/data` yourself if you prefer).
+2) Start Vault again with `./build.sh` or `./build.ps1`.
+3) Initialize and unseal as in [Vault Setup and Startup](#vault-setup-and-startup).
+4) Enable KV v2, write `kv/uhgroupings`, create policy/token, and update overrides as in [Store the Grouper API Password](#store-the-grouper-api-password).
