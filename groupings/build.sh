@@ -14,7 +14,7 @@
 
 # Vault access
 export VAULT_URL="http://localhost:8200/ui"
-export VAULT_SECRET_URL="http://localhost:8200/v1/cubbyhole/uhgroupings"
+export VAULT_SECRET_URL="http://localhost:8200/v1/kv/data/uhgroupings"
 export VAULT_SECRET_KEY="grouperClient.webService.password"
 
 # Function: check the Vault status.

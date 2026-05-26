@@ -12,7 +12,7 @@
 
 # Vault access
 $env:VAULT_URL = "http://localhost:8200/ui"
-$env:VAULT_SECRET_URL = "http://localhost:8200/v1/cubbyhole/uhgroupings"
+$env:VAULT_SECRET_URL = "http://localhost:8200/v1/kv/data/uhgroupings"
 $env:VAULT_SECRET_KEY = "grouperClient.webService.password"
 
 # Function: check the Vault status.
