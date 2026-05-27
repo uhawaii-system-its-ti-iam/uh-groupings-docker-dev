@@ -3,6 +3,8 @@
 <!-- TOC -->
 * [Table of Contents](#table-of-contents)
 * [Overview](#overview)
+  * [Why KV instead of cubbyhole](#why-kv-instead-of-cubbyhole)
+  * [Reminder to unseal the vault](#reminder-to-unseal-the-vault)
 * [Installation](#installation)
   * [Vault Setup and Startup](#vault-setup-and-startup)
   * [Enable the KV Secrets Engine](#enable-the-kv-secrets-engine)
@@ -89,14 +91,23 @@ Run once per Vault instance after init and unseal (from the vault container exec
 or CLI with `VAULT_ADDR` set):
 
     vault login
-    vault secrets enable -path=kv kv
+    vault secrets enable -path=kv -version=2 kv
 
-If the engine is already enabled, Vault reports that the path is already in use;
+`-version=2` is explicit so the mount is unambiguously KV v2 regardless of the
+Vault image's default. The policy and HTTP path below (`kv/data/uhgroupings`,
+`/v1/kv/data/uhgroupings`) depend on KV v2's `data/` segment.
+
+If the engine is already enabled at a different version, disable it first
+(`vault secrets disable kv`) and re-enable with `-version=2`, then re-write the
+secret. If it is already enabled as v2, Vault reports that the path is in use;
 that is fine.
 
 ## Store the Grouper API Password
 
-Important vault values for here and in the scripts:
+Important vault values referenced throughout this README and by the Groupings
+API at runtime (the Groupings build scripts only use `VAULT_URL` for a liveness
+check; the values below are consumed by the Spring API and by manual `vault`
+CLI / `curl` commands):
 
 - Vault path:   `kv/uhgroupings` (Spring: `vault://kv/uhgroupings`)
 - Password key: `grouperClient.webService.password`
