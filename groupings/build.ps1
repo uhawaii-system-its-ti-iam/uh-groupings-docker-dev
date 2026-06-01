@@ -10,10 +10,9 @@
 # The build process will create the Vault and Groupings images and put them
 # into their respective stacks.
 
-# Vault access
+# Vault access (used only by Check-VaultStatus below; secret path/key are
+# documented in vault/README.md and consumed by the Spring API at runtime).
 $env:VAULT_URL = "http://localhost:8200/ui"
-$env:VAULT_SECRET_URL = "http://localhost:8200/v1/cubbyhole/uhgroupings"
-$env:VAULT_SECRET_KEY = "grouperClient.webService.password"
 
 # Function: check the Vault status.
 function Check-VaultStatus {

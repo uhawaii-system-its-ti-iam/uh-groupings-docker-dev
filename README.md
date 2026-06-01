@@ -1,9 +1,10 @@
 # Table of Contents
 <!-- TOC -->
+* [Table of Contents](#table-of-contents)
 * [Overview](#overview)
+  * [Work Remaining](#work-remaining)
   * [Anticipated localhost Tool(s)](#anticipated-localhost-tools)
   * [Questions and Answers](#questions-and-answers)
-  * [Warning for Windows Users](#warning-for-windows-users)
 * [Setting Up](#setting-up)
   * [Spring Boot Hot Updates with DevTools](#spring-boot-hot-updates-with-devtools)
     * [DevTools Key Features](#devtools-key-features)

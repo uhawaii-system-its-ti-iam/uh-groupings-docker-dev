@@ -13,7 +13,7 @@ effect.
 
 1. The groupings API and UI projects must already be cloned to the localhost.
 2. Overrides folder must already be created on the path ( ${user.home}/.${user.name}-conf ) in the localhost
-3. The localhost Vault container must be running and contain the Groupings API password. See the vault README for details.
+3. The localhost Vault container must be running and contain the Groupings API password at `kv/uhgroupings`. See the vault README for details.
 
 # Installation
 

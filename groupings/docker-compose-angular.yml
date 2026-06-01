@@ -21,7 +21,7 @@ services:
       - ${USERPROFILE}/.${USERNAME}-conf:/overrides
     environment:
       - SPRING_PROFILES_ACTIVE=dockerhost
-      - spring.config.import=optional:file:/overrides/uh-groupings-api-overrides.properties, vault://cubbyhole/uhgroupings
+      - spring.config.import=optional:file:/overrides/uh-groupings-api-overrides.properties, vault://kv/uhgroupings
       - spring.cloud.vault.enabled=true
       - spring.cloud.vault.uri=http://host.docker.internal:8200
 #       spring.cloud.vault.token= xxx.xxxxxxxxxxxxxxxxxxxx
