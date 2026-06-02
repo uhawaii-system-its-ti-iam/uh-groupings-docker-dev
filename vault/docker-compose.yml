@@ -7,7 +7,7 @@ services:
     image: hashicorp/vault:latest
     container_name: groupings-vault
     ports:
-      - "8200:8200"
+      - "127.0.0.1:8200:8200"
     volumes:
       - ${USERPROFILE}/.vault/uhgroupings/data:/vault/data
       - ${USERPROFILE}/.vault/uhgroupings/config:/vault/config

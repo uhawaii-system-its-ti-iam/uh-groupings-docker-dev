@@ -12,11 +12,8 @@ fi
 mkdir -pv ${HOME}/.vault/uhgroupings/data
 mkdir -pv ${HOME}/.vault/uhgroupings/config
 
-# Ensure any previous vault data is removed to ensure a fresh init.
-if [ -n "$(ls -A ${HOME}/.vault/uhgroupings/data/)" ]; then
-  echo "Info: removed existing vault data to ensure a fresh init."
-  rm -rf ${HOME}/.vault/uhgroupings/data/*
-fi
+# Vault data under ~/.vault/uhgroupings/data is persisted across runs.
+# To wipe storage and start over, use ./reset-vault.sh from this directory.
 
 # Copy the Vault configuration file to the appropriate directory.
 cp -v vault-config.hcl ${HOME}/.vault/uhgroupings/config
