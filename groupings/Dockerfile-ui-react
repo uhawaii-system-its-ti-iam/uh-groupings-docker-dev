@@ -1,4 +1,4 @@
-#Dockerfile-ui-react - UH Groupings UI - enable hot updates from the editor in local machine
+# Dockerfile-ui-react - UH Groupings UI - enable hot updates from the editor in local machine
 
 # Use Node image
 FROM node:21-alpine
