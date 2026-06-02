@@ -16,14 +16,6 @@ WORKDIR /app/groupings/ui
 #Switch to the non-root user
 USER ${USERNAME}
 
-#Copy only package files to leverage Docker layer caching
-#This ensures npm install only re-runs if dependencies actually change
-COPY --chown=${USERNAME}:${USERNAME} package*.json ./
-
-#Install development dependencies during build time
-#The node_modules directory is mounted as a named volume to persist dependencies between restarts
-RUN npm install
-
-#Source code is mounted as a volume, so no need to copy it here
-
-CMD ["sh", "-c", "npm run ${NODE_PROFILES_ACTIVE}"]
+# Install development dependencies when container starts
+# This allows hot-reloading because the source code is mounted as a volume
+CMD ["sh", "-c", "npm install && npm run ${NODE_PROFILES_ACTIVE}"]
